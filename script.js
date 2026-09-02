@@ -186,17 +186,32 @@ async function renderControleFases() {
     var btnHtml = liberada
       ? '<button class="ctrl-fase-btn fechar" onclick="fecharFase(' + i + ')">Fechar</button>'
       : '<button class="ctrl-fase-btn lib" onclick="liberarFase(' + i + ')">Liberar</button>';
+    var solucao = FASES[i].solucao.map(function(s, j) { return '<span class="solucao-passo">' + (j+1) + '. ' + s + '</span>'; }).join('');
     html += '<div class="' + classe + '">' +
+      '<div class="ctrl-fase-topo" onclick="toggleFaseDetalhe(' + i + ')">' +
       '<div class="ctrl-fase-num">' + (i + 1) + '</div>' +
       '<div class="ctrl-fase-info"><strong>' + FASES[i].titulo + '</strong>' +
       (liberada ? 'Liberada' : 'Bloqueada') + '</div>' +
-      btnHtml + '</div>';
+      '<span class="ctrl-fase-seta" id="setaFase' + i + '">&#9660;</span>' +
+      btnHtml + '</div>' +
+      '<div class="ctrl-fase-detalhe hidden" id="detalheFase' + i + '">' +
+      '<div class="solucao-box"><strong>Resposta correta:</strong>' + solucao + '</div>' +
+      '<div class="dica-box"><strong>Dica:</strong> ' + FASES[i].dica + '</div>' +
+      '</div></div>';
   }
   c.innerHTML = html;
   var badge = document.getElementById('faseAtualProf');
   if (badge) {
     badge.textContent = liberadas.length > 0 ? 'Fase ' + (Math.max.apply(null, liberadas) + 1) : 'Nenhuma';
   }
+}
+
+function toggleFaseDetalhe(idx) {
+  var el = document.getElementById('detalheFase' + idx);
+  var seta = document.getElementById('setaFase' + idx);
+  if (!el) return;
+  el.classList.toggle('hidden');
+  seta.innerHTML = el.classList.contains('hidden') ? '&#9660;' : '&#9650;';
 }
 
 async function liberarFase(idx) {
@@ -292,8 +307,9 @@ function renderPrograma() {
   estado.programa.forEach(function(txt, idx) {
     var d = document.createElement('div');
     d.className = 'bloco bloco-programa';
-    d.innerHTML = '<span class="bloco-num">' + (idx + 1) + '.</span> ' + txt +
-      ' <button class="bloco-remove" onclick="removerBloco(' + idx + ')">&times;</button>';
+    d.innerHTML = '<span class="bloco-num">' + (idx + 1) + '.</span>' +
+      '<span class="bloco-txt">' + txt + '</span>' +
+      '<button class="bloco-remove" onclick="removerBloco(' + idx + ')">&times;</button>';
     c.appendChild(d);
   });
 }
