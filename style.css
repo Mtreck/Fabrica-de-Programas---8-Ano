@@ -131,9 +131,9 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .rank-1{background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,215,0,.05))!important;border:1px solid rgba(255,215,0,.3)!important}
 .rank-2{background:linear-gradient(135deg,rgba(192,192,192,.12),rgba(192,192,192,.04))!important;border:1px solid rgba(192,192,192,.25)!important}
 .rank-3{background:linear-gradient(135deg,rgba(205,127,50,.12),rgba(205,127,50,.04))!important;border:1px solid rgba(205,127,50,.25)!important}
-.rank-trapaceou .rank-nome{text-decoration:line-through;opacity:.5}
-.rank-aviso{background:rgba(230,57,70,.15)!important;border:1px solid rgba(230,57,70,.4)!important}
-.rank-aviso-badge{font-size:10px;background:var(--red);color:#fff;padding:2px 6px;border-radius:8px;margin-left:6px;font-weight:700}
+.rank-trapaceou .rank-nome{opacity:.8}
+.rank-aviso{background:rgba(230,57,70,.1)!important;border:1px solid rgba(230,57,70,.25)!important}
+.rank-x{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:var(--red);color:#fff;border-radius:50%;font-size:10px;font-weight:900;margin-left:4px;flex-shrink:0}
 
 /* ===== RANKING PROFESSOR ===== */
 .ranking-prof{min-height:200px}

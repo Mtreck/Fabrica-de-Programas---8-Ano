@@ -383,14 +383,22 @@ async function salvarRanking() {
     nome: estado.nome,
     pontos: estado.pontos,
     fase: estado.fase + 1,
-    tempo: tempo,
-    trapaceou: false
+    tempo: tempo
   }, { onConflict: 'nome' });
 }
 
-async function marcarTrapaceou() {
+async function marcarSaida() {
   if (!estado.nome) return;
-  await supabase.from('ranking').update({ trapaceou: true }).eq('nome', estado.nome);
+  // busca avisos atuais
+  var resp = await supabase.from('ranking').select('avisos,pontos').eq('nome', estado.nome).single();
+  if (!resp.data) return;
+  var avisos = (resp.data.avisos || 0) + 1;
+  // penalidade: 5, 10, 15, 20... (5 x numero do aviso)
+  var penalidade = avisos * 5;
+  var novosPontos = Math.max(0, resp.data.pontos - penalidade);
+  await supabase.from('ranking').update({ avisos: avisos, pontos: novosPontos }).eq('nome', estado.nome);
+  estado.pontos = novosPontos;
+  document.getElementById('jogarPontos').textContent = novosPontos + ' pts';
 }
 
 async function getRanking() {
@@ -402,7 +410,7 @@ async function getRanking() {
   return resp.data || [];
 }
 
-var MEDALHAS = ['&#129351;','&#129352;','&#129353;']; // ouro, prata, bronze
+var MEDALHAS = ['&#129351;','&#129352;','&#129353;'];
 
 function montarRankRow(r, i, ehEu) {
   var medalha = i < 3 ? '<span class="rank-medal">' + MEDALHAS[i] + '</span>' : '<span class="rank-medal" style="opacity:0">' + (i+1) + 'o</span>';
@@ -411,14 +419,17 @@ function montarRankRow(r, i, ehEu) {
   if (i === 0) classe += ' rank-1';
   if (i === 1) classe += ' rank-2';
   if (i === 2) classe += ' rank-3';
-  var aviso = '';
-  if (r.trapaceou) {
-    classe += ' rank-trapaceou rank-aviso';
-    aviso = '<span class="rank-aviso-badge">SAIU DA TELA</span>';
+  var avisosHtml = '';
+  var avisos = r.avisos || 0;
+  if (avisos > 0) {
+    classe += ' rank-aviso';
+    for (var a = 0; a < avisos; a++) {
+      avisosHtml += '<span class="rank-x">x</span>';
+    }
   }
   return '<div class="' + classe + '">' +
     medalha +
-    '<span class="rank-nome">' + r.nome + aviso + '</span>' +
+    '<span class="rank-nome">' + r.nome + avisosHtml + '</span>' +
     '<span class="rank-pontos">' + r.pontos + '</span></div>';
 }
 
@@ -456,17 +467,17 @@ async function limparRanking() {
   }
 }
 
-// ===== DETECCAO DE SAIDA DE TELA (Trapaca) =====
+// ===== DETECCAO DE SAIDA DE TELA =====
 document.addEventListener('visibilitychange', function() {
   if (!estado.nome) return;
   if (document.hidden) {
-    marcarTrapaceou();
+    marcarSaida();
   }
 });
 
 window.addEventListener('blur', function() {
   if (!estado.nome) return;
-  marcarTrapaceou();
+  marcarSaida();
 });
 
 // ===== REALTIME: atualiza ranking e fases em tempo real =====
