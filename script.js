@@ -1,3 +1,7 @@
+var SUPABASE_URL = 'https://zgmjscrqndjrrkicvnqj.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnbWpzY3JxbmRqcnJraWN2bnFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzMzYxNDMsImV4cCI6MjEwMzkxMjE0M30.CpT3m4f1or8DBSXibDbu734NSqjqYh2HkJ-f0gSY4t4';
+var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 var FASES = [
   {
     titulo: "Fase 1 - Fazer Suco",
@@ -350,8 +354,7 @@ function executarPrograma() {
         fb.textContent = 'Programa correto! +' + pts + ' pontos';
         fb.className = 'feedback ok';
         document.getElementById('btnProxima').classList.remove('hidden');
-        salvarRanking();
-        renderRankingMini();
+        salvarRanking().then(function() { renderRankingMini(); });
       } else {
         fb.textContent = 'Programa com erro. Ordene os blocos novamente. Dica: ' + f.dica;
         fb.className = 'feedback err';
@@ -382,39 +385,30 @@ function proximaFase() {
   }
 }
 
-// ===== RANKING =====
-function salvarRanking() {
-  var key = 'fabrica_ranking';
-  var arr = [];
-  try { arr = JSON.parse(localStorage.getItem(key) || '[]'); } catch (e) { arr = []; }
+// ===== RANKING (Supabase) =====
+async function salvarRanking() {
   var tempo = Math.floor((Date.now() - estado.inicio) / 1000);
-  // procura se ja existe esse nome, soma os pontos
-  var existe = false;
-  for (var i = 0; i < arr.length; i++) {
-    if (arr[i].nome === estado.nome) {
-      arr[i].pontos = estado.pontos;
-      arr[i].fase = Math.max(arr[i].fase, estado.fase + 1);
-      arr[i].tempo = tempo;
-      existe = true;
-      break;
-    }
-  }
-  if (!existe) {
-    arr.push({ nome: estado.nome, pontos: estado.pontos, tempo: tempo, fase: estado.fase + 1 });
-  }
-  arr.sort(function(a, b) { return b.pontos - a.pontos || a.tempo - b.tempo; });
-  arr = arr.slice(0, 20);
-  localStorage.setItem(key, JSON.stringify(arr));
+  await supabase.from('ranking').upsert({
+    nome: estado.nome,
+    pontos: estado.pontos,
+    fase: estado.fase + 1,
+    tempo: tempo
+  }, { onConflict: 'nome' });
 }
 
-function getRanking() {
-  try { return JSON.parse(localStorage.getItem('fabrica_ranking') || '[]'); } catch (e) { return []; }
+async function getRanking() {
+  var resp = await supabase
+    .from('ranking')
+    .select('*')
+    .order('pontos', { ascending: false })
+    .limit(20);
+  return resp.data || [];
 }
 
-function renderRankingProf() {
+async function renderRankingProf() {
   var c = document.getElementById('rankingProf');
   if (!c) return;
-  var arr = getRanking();
+  var arr = await getRanking();
   if (arr.length === 0) {
     c.innerHTML = '<p class="ranking-vazio">Ninguem jogou ainda. Projete o QR e aguarde.</p>';
     return;
@@ -426,10 +420,10 @@ function renderRankingProf() {
   }).join('');
 }
 
-function renderRankingMini() {
+async function renderRankingMini() {
   var c = document.getElementById('rankingMini');
   if (!c) return;
-  var arr = getRanking().slice(0, 5);
+  var arr = (await getRanking()).slice(0, 5);
   if (arr.length === 0) {
     c.innerHTML = '<p class="hint">Seja o primeiro!</p>';
     return;
@@ -440,13 +434,22 @@ function renderRankingMini() {
   }).join('');
 }
 
-function limparRanking() {
+async function limparRanking() {
   if (confirm('Zerar ranking de todos?')) {
-    localStorage.removeItem('fabrica_ranking');
+    await supabase.from('ranking').delete().neq('id', 0);
     renderRankingProf();
     renderRankingMini();
   }
 }
+
+// ===== REALTIME: atualiza ranking quando qualquer aluno pontua =====
+supabase
+  .channel('ranking-changes')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'ranking' }, function() {
+    renderRankingMini();
+    renderRankingProf();
+  })
+  .subscribe();
 
 // ===== POLLING: checa se fase foi liberada a cada 2s =====
 setInterval(function() {
