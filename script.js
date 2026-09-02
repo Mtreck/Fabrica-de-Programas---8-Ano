@@ -167,11 +167,17 @@ function copiarLink() {
   }
 }
 
-// ===== CONTROLE DE FASES (PROFESSOR) =====
-function renderControleFases() {
+// ===== CONTROLE DE FASES (Supabase) =====
+async function getFasesLiberadas() {
+  var resp = await supabase.from('fases_liberadas').select('fase').order('fase');
+  if (!resp.data) return [];
+  return resp.data.map(function(r) { return r.fase; });
+}
+
+async function renderControleFases() {
   var c = document.getElementById('controleFases');
   if (!c) return;
-  var liberadas = getFasesLiberadas();
+  var liberadas = await getFasesLiberadas();
   var html = '';
   for (var i = 0; i < FASES.length; i++) {
     var liberada = liberadas.indexOf(i) !== -1;
@@ -190,31 +196,16 @@ function renderControleFases() {
   if (badge) {
     badge.textContent = liberadas.length > 0 ? 'Fase ' + (Math.max.apply(null, liberadas) + 1) : 'Nenhuma';
   }
-  // salva timestamp da ultima liberacao pra alunos saberem
-  localStorage.setItem('fabrica_liberadas', JSON.stringify(liberadas));
-  localStorage.setItem('fabrica_liberadas_ts', Date.now().toString());
 }
 
-function liberarFase(idx) {
-  var liberadas = getFasesLiberadas();
-  if (liberadas.indexOf(idx) === -1) liberadas.push(idx);
-  liberadas.sort(function(a, b) { return a - b; });
-  localStorage.setItem('fabrica_liberadas', JSON.stringify(liberadas));
-  localStorage.setItem('fabrica_liberadas_ts', Date.now().toString());
+async function liberarFase(idx) {
+  await supabase.from('fases_liberadas').upsert({ fase: idx }, { onConflict: 'fase' });
   renderControleFases();
 }
 
-function fecharFase(idx) {
-  var liberadas = getFasesLiberadas();
-  liberadas = liberadas.filter(function(x) { return x !== idx; });
-  localStorage.setItem('fabrica_liberadas', JSON.stringify(liberadas));
-  localStorage.setItem('fabrica_liberadas_ts', Date.now().toString());
+async function fecharFase(idx) {
+  await supabase.from('fases_liberadas').delete().eq('fase', idx);
   renderControleFases();
-}
-
-function getFasesLiberadas() {
-  try { return JSON.parse(localStorage.getItem('fabrica_liberadas') || '[]'); }
-  catch (e) { return []; }
 }
 
 // ===== JOGAR =====
@@ -243,8 +234,8 @@ function iniciarTimer() {
   }, 500);
 }
 
-function checarFaseLiberada() {
-  var liberadas = getFasesLiberadas();
+async function checarFaseLiberada() {
+  var liberadas = await getFasesLiberadas();
   if (liberadas.indexOf(estado.fase) !== -1) {
     document.getElementById('faseAguardando').classList.add('hidden');
     document.getElementById('faseConteudo').classList.remove('hidden');
@@ -442,12 +433,15 @@ async function limparRanking() {
   }
 }
 
-// ===== REALTIME: atualiza ranking quando qualquer aluno pontua =====
+// ===== REALTIME: atualiza ranking e fases em tempo real =====
 supabase
   .channel('ranking-changes')
   .on('postgres_changes', { event: '*', schema: 'public', table: 'ranking' }, function() {
     renderRankingMini();
     renderRankingProf();
+  })
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'fases_liberadas' }, function() {
+    checarFaseLiberada();
   })
   .subscribe();
 
