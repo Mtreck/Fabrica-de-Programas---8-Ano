@@ -148,6 +148,9 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .ranking-vazio{color:#a0aec0;font-size:13px;text-align:center;padding:30px 0}
 .lista-jogadores{display:flex;flex-wrap:wrap;gap:6px}
 .jogador-chip{background:var(--bg);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700}
+.online-dot{position:relative;padding-left:20px}
+.online-dot::before{content:'';position:absolute;left:6px;top:50%;transform:translateY(-50%);width:8px;height:8px;background:#22c55e;border-radius:50%;animation:onlinePulse 2s infinite}
+@keyframes onlinePulse{0%,100%{opacity:1}50%{opacity:.4}}
 
 /* ===== RANKING ANIMATIONS ===== */
 @keyframes rankPop{0%{transform:scale(1)}50%{transform:scale(1.03)}100%{transform:scale(1)}}

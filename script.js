@@ -117,6 +117,7 @@ function entrarProf() {
     gerarQR();
     renderRankingProf();
     renderControleFases();
+    renderJogadores();
   } else {
     erro.classList.remove('hidden');
     input.value = '';
@@ -136,7 +137,7 @@ function router(view) {
     if (profLogado()) {
       document.getElementById('profLoginBox').classList.add('hidden');
       document.getElementById('profPainel').classList.remove('hidden');
-      gerarQR(); renderRankingProf(); renderControleFases();
+      gerarQR(); renderRankingProf(); renderControleFases(); renderJogadores();
     } else {
       document.getElementById('profLoginBox').classList.remove('hidden');
       document.getElementById('profPainel').classList.add('hidden');
@@ -221,6 +222,7 @@ function entrarJogo() {
   document.getElementById('playerName').textContent = n;
   iniciarTimer();
   carregarFase();
+  registrarOnline();
 }
 
 function iniciarTimer() {
@@ -467,6 +469,58 @@ async function limparRanking() {
   }
 }
 
+// ===== ONLINE (Supabase) =====
+async function registrarOnline() {
+  if (!estado.nome) return;
+  await supabase.from('online').upsert({
+    nome: estado.nome,
+    last_seen: new Date().toISOString()
+  }, { onConflict: 'nome' });
+}
+
+async function removerOnline() {
+  if (!estado.nome) return;
+  await supabase.from('online').delete().eq('nome', estado.nome);
+}
+
+async function pingOnline() {
+  if (!estado.nome) return;
+  await supabase.from('online').update({
+    last_seen: new Date().toISOString()
+  }).eq('nome', estado.nome);
+}
+
+async function getOnline() {
+  var resp = await supabase.from('online').select('nome,last_seen').order('last_seen', { ascending: false });
+  return resp.data || [];
+}
+
+async function renderJogadores() {
+  var c = document.getElementById('listaJogadores');
+  if (!c) return;
+  var lista = await getOnline();
+  var agora = Date.now();
+  var ativos = lista.filter(function(j) {
+    var diff = agora - new Date(j.last_seen).getTime();
+    return diff < 60000;
+  });
+  if (ativos.length === 0) {
+    c.innerHTML = '<span class="hint">Nenhum jogador conectado</span>';
+    return;
+  }
+  c.innerHTML = ativos.map(function(j) {
+    return '<span class="jogador-chip online-dot">' + j.nome + '</span>';
+  }).join('');
+}
+
+setInterval(function() {
+  if (estado.nome) pingOnline();
+}, 30000);
+
+window.addEventListener('beforeunload', function() {
+  removerOnline();
+});
+
 // ===== DETECCAO DE SAIDA DE TELA =====
 document.addEventListener('visibilitychange', function() {
   if (!estado.nome) return;
@@ -480,15 +534,18 @@ window.addEventListener('blur', function() {
   marcarSaida();
 });
 
-// ===== REALTIME: atualiza ranking e fases em tempo real =====
+// ===== REALTIME: atualiza ranking, fases e jogadores em tempo real =====
 supabase
-  .channel('ranking-changes')
+  .channel('all-changes')
   .on('postgres_changes', { event: '*', schema: 'public', table: 'ranking' }, function() {
     renderRankingMini();
     renderRankingProf();
   })
   .on('postgres_changes', { event: '*', schema: 'public', table: 'fases_liberadas' }, function() {
     checarFaseLiberada();
+  })
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'online' }, function() {
+    renderJogadores();
   })
   .subscribe();
 
