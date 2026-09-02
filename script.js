@@ -383,8 +383,14 @@ async function salvarRanking() {
     nome: estado.nome,
     pontos: estado.pontos,
     fase: estado.fase + 1,
-    tempo: tempo
+    tempo: tempo,
+    trapaceou: false
   }, { onConflict: 'nome' });
+}
+
+async function marcarTrapaceou() {
+  if (!estado.nome) return;
+  await supabase.from('ranking').update({ trapaceou: true }).eq('nome', estado.nome);
 }
 
 async function getRanking() {
@@ -396,6 +402,26 @@ async function getRanking() {
   return resp.data || [];
 }
 
+var MEDALHAS = ['&#129351;','&#129352;','&#129353;']; // ouro, prata, bronze
+
+function montarRankRow(r, i, ehEu) {
+  var medalha = i < 3 ? '<span class="rank-medal">' + MEDALHAS[i] + '</span>' : '<span class="rank-medal" style="opacity:0">' + (i+1) + 'o</span>';
+  var classe = 'rank-row';
+  if (ehEu) classe += ' me';
+  if (i === 0) classe += ' rank-1';
+  if (i === 1) classe += ' rank-2';
+  if (i === 2) classe += ' rank-3';
+  var aviso = '';
+  if (r.trapaceou) {
+    classe += ' rank-trapaceou rank-aviso';
+    aviso = '<span class="rank-aviso-badge">SAIU DA TELA</span>';
+  }
+  return '<div class="' + classe + '">' +
+    medalha +
+    '<span class="rank-nome">' + r.nome + aviso + '</span>' +
+    '<span class="rank-pontos">' + r.pontos + '</span></div>';
+}
+
 async function renderRankingProf() {
   var c = document.getElementById('rankingProf');
   if (!c) return;
@@ -405,9 +431,7 @@ async function renderRankingProf() {
     return;
   }
   c.innerHTML = arr.map(function(r, i) {
-    return '<div class="rank-row">' +
-      '<span>' + (i + 1) + 'o ' + r.nome + ' <span class="rank-fase">Fase ' + r.fase + '</span></span>' +
-      '<span class="rank-pontos">' + r.pontos + ' pts</span></div>';
+    return montarRankRow(r, i, false);
   }).join('');
 }
 
@@ -416,12 +440,11 @@ async function renderRankingMini() {
   if (!c) return;
   var arr = (await getRanking()).slice(0, 5);
   if (arr.length === 0) {
-    c.innerHTML = '<p class="hint">Seja o primeiro!</p>';
+    c.innerHTML = '<p style="color:#a0aec0;font-size:12px">Seja o primeiro!</p>';
     return;
   }
   c.innerHTML = arr.map(function(r, i) {
-    var cls = r.nome === estado.nome ? 'rank-row me' : 'rank-row';
-    return '<div class="' + cls + '"><span>' + (i + 1) + 'o ' + r.nome + '</span><span class="rank-pontos">' + r.pontos + '</span></div>';
+    return montarRankRow(r, i, r.nome === estado.nome);
   }).join('');
 }
 
@@ -432,6 +455,19 @@ async function limparRanking() {
     renderRankingMini();
   }
 }
+
+// ===== DETECCAO DE SAIDA DE TELA (Trapaca) =====
+document.addEventListener('visibilitychange', function() {
+  if (!estado.nome) return;
+  if (document.hidden) {
+    marcarTrapaceou();
+  }
+});
+
+window.addEventListener('blur', function() {
+  if (!estado.nome) return;
+  marcarTrapaceou();
+});
 
 // ===== REALTIME: atualiza ranking e fases em tempo real =====
 supabase
