@@ -1,0 +1,205 @@
+:root{
+  --bg:#faf7f2;
+  --card:#fff;
+  --text:#2d2a26;
+  --muted:#8a8580;
+  --accent:#e85d04;
+  --accent2:#f48c06;
+  --blue:#3a86ff;
+  --green:#2ec4b6;
+  --red:#e63946;
+  --border:#e8e4df;
+  --shadow:0 2px 8px rgba(0,0,0,.08);
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;padding-bottom:70px;line-height:1.5}
+
+/* ===== NAV INFERIOR (mobile) ===== */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:100;padding:6px 0 env(safe-area-inset-bottom,6px)}
+.bn-btn{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;color:var(--muted);font-family:inherit;font-size:11px;cursor:pointer}
+.bn-btn.active{color:var(--accent)}
+.bn-icon{font-size:20px}
+
+/* ===== PAGES ===== */
+.page{display:none;padding:16px 16px 80px}
+.page.active{display:block}
+
+/* ===== HOME ===== */
+.home-wrap{max-width:600px;margin:0 auto}
+.home-topo{text-align:center;padding:20px 0 10px}
+.home-icon{font-size:48px;display:block;margin-bottom:8px}
+.home-topo h1{font-size:26px;font-weight:900;color:var(--text)}
+.home-desc{color:var(--muted);margin-top:4px;font-size:14px}
+
+.home-conceito{display:flex;align-items:center;gap:8px;justify-content:center;margin:20px 0;flex-wrap:wrap}
+.conceito-card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center;width:120px;box-shadow:var(--shadow)}
+.conceito-card strong{display:block;font-size:13px;margin:4px 0 2px}
+.conceito-card p{font-size:11px;color:var(--muted)}
+.conceito-card code{font-family:'Fira Code',monospace;font-size:11px;background:#f0ede8;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:4px}
+.conceito-icon{font-size:24px}
+.conceito-mais,.conceito-igual{font-size:24px;font-weight:900;color:var(--muted)}
+.conceito-prog{border-color:var(--accent);background:#fff8f0}
+
+.home-botoes{display:flex;gap:10px;margin:16px 0}
+.btn-home-prof,.btn-home-aluno{flex:1;padding:14px;border:none;border-radius:var(--radius);font-family:inherit;font-weight:700;font-size:15px;cursor:pointer}
+.btn-home-prof{background:var(--blue);color:#fff}
+.btn-home-aluno{background:var(--accent);color:#fff}
+
+.home-como{background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border)}
+.home-como h3{font-size:15px;margin-bottom:10px}
+.como-passos{display:flex;flex-direction:column;gap:8px}
+.como-passo{display:flex;align-items:center;gap:10px}
+.como-num{width:28px;height:28px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;flex-shrink:0}
+.como-passo p{font-size:13px;color:var(--muted)}
+
+/* ===== LOGIN ===== */
+.loginBox{min-height:80dvh;display:flex;align-items:center;justify-content:center}
+.login-card{background:var(--card);border-radius:16px;padding:28px 20px;width:100%;max-width:340px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.login-icon{font-size:40px;margin-bottom:8px}
+.login-card h2{font-size:20px;font-weight:900}
+.login-sub{color:var(--muted);font-size:13px;margin:4px 0 16px}
+.login-card input{width:100%;padding:12px;border:2px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:16px;outline:none;text-align:center}
+.login-card input:focus{border-color:var(--accent)}
+.btn-entrar{width:100%;margin-top:12px;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-family:inherit;font-weight:700;font-size:16px;cursor:pointer}
+
+/* ===== JOGAR HEADER ===== */
+.jogar-header{position:sticky;top:0;z-index:50;background:var(--card);border-radius:var(--radius);padding:10px 12px;margin-bottom:12px;box-shadow:var(--shadow)}
+.jogar-top{display:flex;justify-content:space-between;align-items:center}
+.jogar-nome{font-weight:900;font-size:14px}
+.jogar-pontos{background:var(--accent);color:#fff;padding:3px 10px;border-radius:20px;font-weight:700;font-size:13px}
+.jogar-fase-bar{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
+.barra{height:6px;background:#eee;border-radius:6px;margin-top:6px;overflow:hidden}
+.barra-fill{height:100%;background:var(--green);width:0%;transition:width .4s;border-radius:6px}
+
+/* ===== FASE AGUARDANDO ===== */
+.fase-aguardando{text-align:center;padding:60px 20px}
+.fase-aguardando h2{font-size:18px;margin-top:12px}
+.fase-aguardando p{color:var(--muted);font-size:14px}
+.pulse-icon{font-size:48px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.9)}}
+
+/* ===== FASE CONTEUDO ===== */
+.fase-titulo-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px}
+.fase-titulo-box h2{font-size:18px;font-weight:900;margin-bottom:8px;color:var(--text)}
+.fase-objetivo{font-size:14px;line-height:1.5;color:var(--muted)}
+.fase-exemplo{background:var(--bg);border:1px dashed var(--border);border-radius:8px;padding:10px 12px;font-family:'Fira Code',monospace;font-size:13px;margin-top:12px;color:var(--text)}
+
+.blocos-section{margin-bottom:20px}
+.section-label{font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+
+/* ===== BLOCOS ===== */
+.blocos-pool{display:flex;flex-wrap:wrap;gap:8px}
+.bloco{background:var(--accent2);color:#fff;padding:12px 16px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;user-select:none;border-bottom:3px solid #c77b00;transition:transform .1s;-webkit-user-select:none;line-height:1.3}
+.bloco:active{transform:scale(.95);border-bottom-width:1px}
+.bloco-programa{background:var(--blue);border-bottom-color:#2563c7}
+.bloco-programa .bloco-remove{background:var(--red);color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:15px;cursor:pointer;margin-left:8px;display:flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0}
+.bloco-num{opacity:.6;margin-right:4px;font-size:11px}
+
+/* ===== PROGRAMA AREA ===== */
+.programa-section{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:16px}
+.programa-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.programa-header span{font-weight:700;font-size:14px}
+.btn-limpar{background:none;border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-family:inherit;font-size:12px;color:var(--muted);cursor:pointer}
+.programa-area{min-height:120px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;padding:4px}
+.vazio-msg{color:var(--muted);font-size:13px;width:100%;text-align:center;padding:28px 0}
+
+/* ===== BOTOES DE ACAO ===== */
+.btn-executar{width:100%;padding:16px;background:var(--green);color:#fff;border:none;border-radius:var(--radius);font-family:inherit;font-weight:900;font-size:17px;cursor:pointer;margin-bottom:12px}
+.btn-executar:active{transform:scale(.98)}
+.btn-proxima{width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;margin-top:10px}
+
+/* ===== EXEC LOG ===== */
+.exec-log{background:#2d2a26;color:#a8e6cf;font-family:'Fira Code',monospace;font-size:12px;border-radius:var(--radius);padding:12px;margin-top:12px;white-space:pre-line;line-height:1.6}
+
+/* ===== FEEDBACK ===== */
+.feedback{border-radius:var(--radius);padding:16px;font-weight:700;font-size:14px;text-align:center;margin-top:12px;line-height:1.4}
+.feedback.ok{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
+.feedback.err{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
+.feedback.aguardando{background:#fff3cd;color:#856404;border:1px solid #ffeeba}
+
+/* ===== MINI RANKING ===== */
+.mini-ranking{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-top:20px}
+.mini-ranking h4{font-size:13px;margin-bottom:8px}
+.rank-row{display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:6px;margin-bottom:4px;font-size:13px}
+.rank-row.me{border:2px solid var(--accent)}
+.rank-pontos{font-weight:700}
+.rank-fase{font-size:11px;color:var(--muted);font-weight:400;margin-left:4px}
+
+/* ===== PROFESSOR ===== */
+.prof-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1000px;margin:0 auto}
+.prof-col{display:flex;flex-direction:column;gap:14px}
+.prof-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.prof-card h2{font-size:17px;margin-bottom:10px}
+.prof-card h4{font-size:14px;margin-bottom:6px}
+.prof-campo label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase}
+.prof-row{display:flex;gap:6px;margin-top:4px}
+.prof-row input{flex:1;padding:10px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;outline:none}
+.prof-row input:focus{border-color:var(--accent)}
+.btn-sm{padding:8px 12px;background:var(--text);color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.btn-sm:hover{opacity:.85}
+.btn-danger{background:var(--red)}
+.prof-botoes{display:flex;gap:6px;margin-top:8px}
+.qr-box{background:#fff;border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;margin:10px 0}
+.qr-box img{width:180px;height:180px;border-radius:8px}
+.qr-link{font-size:11px;color:var(--muted);word-break:break-all;margin-top:6px;font-family:'Fira Code',monospace}
+.prof-dicas{background:var(--bg);border-radius:var(--radius);padding:10px;margin-top:10px}
+.prof-dicas h4{font-size:13px;margin-bottom:4px}
+.prof-dicas ul{font-size:12px;color:var(--muted);padding-left:16px}
+.prof-dicas li{margin-bottom:2px}
+.prof-hint{font-size:12px;color:var(--muted);margin-bottom:8px}
+
+/* ===== PROF LOGIN ===== */
+.prof-login-box{min-height:60dvh;display:flex;align-items:center;justify-content:center}
+.prof-senha-erro{color:var(--red);font-size:13px;margin:6px 0 0}
+
+/* ===== CONTROLE FASES ===== */
+.controle-fases{display:flex;flex-direction:column;gap:6px}
+.ctrl-fase{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg);border-radius:8px;border:2px solid transparent}
+.ctrl-fase.lib{border-color:var(--green);background:#f0faf8}
+.ctrl-fase-atual{border-color:var(--accent);background:#fff8f0}
+.ctrl-fase-num{width:28px;height:28px;background:var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;flex-shrink:0}
+.ctrl-fase.lib .ctrl-fase-num{background:var(--green);color:#fff}
+.ctrl-fase-atual .ctrl-fase-num{background:var(--accent);color:#fff}
+.ctrl-fase-info{flex:1;font-size:13px}
+.ctrl-fase-info strong{display:block;font-size:12px}
+.ctrl-fase-btn{padding:6px 10px;border:none;border-radius:6px;font-family:inherit;font-weight:700;font-size:11px;cursor:pointer}
+.ctrl-fase-btn.lib{background:var(--green);color:#fff}
+.ctrl-fase-btn.fechar{background:var(--red);color:#fff}
+.fase-atual-badge{background:var(--accent);color:#fff;padding:2px 10px;border-radius:12px;font-weight:700;font-size:13px}
+.prof-status{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px}
+
+/* ===== RANKING PROF ===== */
+.ranking-prof{min-height:200px}
+.ranking-prof .rank-row{font-size:14px;padding:8px 10px}
+.ranking-vazio{color:var(--muted);font-size:13px;text-align:center;padding:30px 0}
+.lista-jogadores{display:flex;flex-wrap:wrap;gap:6px}
+.jogador-chip{background:var(--bg);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700}
+
+/* ===== UTILS ===== */
+.hidden{display:none !important}
+.hint{color:var(--muted);font-size:12px}
+
+/* ===== MOBILE ===== */
+@media(max-width:700px){
+  .prof-grid{grid-template-columns:1fr}
+  .home-conceito{gap:6px}
+  .conceito-card{width:100px;padding:8px}
+  .conceito-card code{font-size:10px}
+  .page-prof{padding-bottom:80px}
+  .fase-titulo-box{padding:14px;margin-bottom:16px}
+  .fase-titulo-box h2{font-size:16px}
+  .fase-objetivo{font-size:13px}
+  .blocos-pool{gap:6px}
+  .bloco{padding:10px 12px;font-size:12px}
+  .programa-section{padding:10px}
+  .programa-area{min-height:100px}
+}
+@media(max-width:380px){
+  .conceito-card{width:90px}
+  .conceito-mais,.conceito-igual{font-size:18px}
+  .bloco{padding:9px 10px;font-size:11px}
+  .fase-titulo-box h2{font-size:15px}
+  .fase-objetivo{font-size:12px}
+}

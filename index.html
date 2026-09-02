@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Fabrica de Programas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- MOBILE: Aluno -->
+<div id="view-jogar" class="page page-jogar active">
+  <div id="loginBox" class="loginBox">
+    <div class="login-card">
+      <div class="login-icon">&#9881;</div>
+      <h2>Fabrica de Programas</h2>
+      <p class="login-sub">Monte o programa antes dos outros</p>
+      <input id="nomeInput" type="text" placeholder="Seu nome" maxlength="15" autocomplete="off">
+      <button id="btnEntrar" class="btn-entrar" onclick="entrarJogo()">Entrar na sala</button>
+    </div>
+  </div>
+
+  <div id="gameBox" class="hidden">
+    <header class="jogar-header">
+      <div class="jogar-top">
+        <span id="playerName" class="jogar-nome"></span>
+        <span id="jogarPontos" class="jogar-pontos">0 pts</span>
+      </div>
+      <div class="jogar-fase-bar">
+        <span id="faseLabel">Fase 1</span>
+        <span id="tempo">00:00</span>
+      </div>
+      <div class="barra"><div id="progressBar" class="barra-fill"></div></div>
+    </header>
+
+    <div id="faseAguardando" class="fase-aguardando">
+      <div class="pulse-icon">&#8987;</div>
+      <h2>Aguardando o professor...</h2>
+      <p>A fase sera liberada em instantes</p>
+      <p class="hint">Nao feche esta pagina</p>
+    </div>
+
+    <div id="faseConteudo" class="hidden">
+      <div class="fase-titulo-box">
+        <h2 id="faseTitulo"></h2>
+        <p id="faseObjetivo" class="fase-objetivo"></p>
+        <div id="faseExemplo" class="fase-exemplo"></div>
+      </div>
+
+      <div class="blocos-section">
+        <p class="section-label">Toque nos blocos para adicionar ao programa</p>
+        <div id="blocosDisponiveis" class="blocos-pool"></div>
+      </div>
+
+      <div class="programa-section">
+        <div class="programa-header">
+          <span>Seu programa</span>
+          <button class="btn-limpar" onclick="limparPrograma()">Limpar</button>
+        </div>
+        <div id="meuPrograma" class="programa-area">
+          <p class="vazio-msg">Toque nos blocos acima</p>
+        </div>
+      </div>
+
+      <button id="btnExecutar" class="btn-executar" onclick="executarPrograma()">Executar Programa</button>
+
+      <div id="execLog" class="exec-log hidden"></div>
+      <div id="feedback" class="feedback hidden"></div>
+
+      <button id="btnProxima" class="btn-proxima hidden" onclick="proximaFase()">Proxima fase</button>
+    </div>
+
+    <div class="mini-ranking">
+      <h4>Ranking</h4>
+      <div id="rankingMini"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFESSOR: desktop -->
+<div id="view-professor" class="page page-prof">
+  <!-- LOGIN PROFESSOR -->
+  <div id="profLoginBox" class="prof-login-box">
+    <div class="login-card">
+      <div class="login-icon">&#9881;</div>
+      <h2>Painel do Professor</h2>
+      <p class="login-sub">Digite a senha de acesso</p>
+      <input id="profSenhaInput" type="password" placeholder="Senha" autocomplete="off">
+      <p id="profSenhaErro" class="prof-senha-erro hidden">Senha incorreta</p>
+      <button class="btn-entrar" onclick="entrarProf()">Entrar</button>
+      <p class="hint" style="margin-top:12px">Senha padrao: <strong>prof</strong> (altere ao criar a sala)</p>
+    </div>
+  </div>
+
+  <!-- PAINEL PROFESSOR (escondido ate digitar senha) -->
+  <div id="profPainel" class="hidden">
+  <div class="prof-grid">
+    <div class="prof-col">
+      <div class="prof-card">
+        <h2>Painel do Professor</h2>
+        <div class="prof-campo">
+          <label>Nome da sala</label>
+          <div class="prof-row">
+            <input id="salaInput" value="SALA-7A" type="text">
+            <button class="btn-sm" onclick="gerarQR()">Gerar QR</button>
+          </div>
+        </div>
+        <div id="qrBox" class="qr-box">
+          <img id="qrImg" src="" alt="QR">
+          <p id="qrLink" class="qr-link"></p>
+        </div>
+        <div class="prof-botoes">
+          <button class="btn-sm" onclick="copiarLink()">Copiar link</button>
+          <button class="btn-sm btn-danger" onclick="limparRanking()">Zerar ranking</button>
+        </div>
+
+        <div class="prof-dicas">
+          <h4>O que explicar:</h4>
+          <ul>
+            <li>Se trocar 1 bloco, o programa quebra</li>
+            <li>Algoritmo sozinho nao faz nada</li>
+            <li>Programa = algoritmos na ordem certa</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="prof-card">
+        <h2>Controle de Fases</h2>
+        <p class="prof-hint">Libere cada fase quando quiser. O aluno so ve a fase liberada.</p>
+        <div id="controleFases" class="controle-fases"></div>
+        <div class="prof-status">
+          <span>Fase atual:</span>
+          <span id="faseAtualProf" class="fase-atual-badge">Nenhuma</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="prof-col">
+      <div class="prof-card ranking-card">
+        <h2>Ranking ao vivo</h2>
+        <div id="rankingProf" class="ranking-prof"></div>
+      </div>
+      <div class="prof-card">
+        <h4>Jogadores conectados</h4>
+        <div id="listaJogadores" class="lista-jogadores"></div>
+      </div>
+    </div>
+  </div>
+  </div><!-- /prof-painel -->
+</div>
+
+<!-- HOME -->
+<div id="view-home" class="page page-home active">
+  <div class="home-wrap">
+    <div class="home-topo">
+      <div class="home-icon">&#9881;</div>
+      <h1>Fabrica de Programas</h1>
+      <p class="home-desc">Monte programas com blocos. Cada bloco e um algoritmo. Juntos formam um programa.</p>
+    </div>
+
+    <div class="home-conceito">
+      <div class="conceito-card">
+        <span class="conceito-icon">&#9641;</span>
+        <strong>Algoritmo</strong>
+        <p>Uma instrucao sozinha</p>
+        <code>PEGAR NUMERO</code>
+      </div>
+      <div class="conceito-mais">+</div>
+      <div class="conceito-card">
+        <span class="conceito-icon">&#9641;</span>
+        <strong>Algoritmo</strong>
+        <p>Mais uma instrucao</p>
+        <code>MULTIPLICAR POR 2</code>
+      </div>
+      <div class="conceito-igual">=</div>
+      <div class="conceito-card conceito-prog">
+        <span class="conceito-icon">&#9881;</span>
+        <strong>Programa</strong>
+        <p>Sequencia que resolve algo</p>
+        <code>PEGAR &rarr; MULT. &rarr; MOSTRAR</code>
+      </div>
+    </div>
+
+    <div class="home-botoes">
+      <button class="btn-home-prof" onclick="router('professor')">Sou professor</button>
+      <button class="btn-home-aluno" onclick="router('jogar')">Sou aluno</button>
+    </div>
+
+    <div class="home-como">
+      <h3>Como funciona</h3>
+      <div class="como-passos">
+        <div class="como-passo">
+          <span class="como-num">1</span>
+          <p>Professor cria a sala e projeta o QR</p>
+        </div>
+        <div class="como-passo">
+          <span class="como-num">2</span>
+          <p>Alunos escaneiam e entram com o nome</p>
+        </div>
+        <div class="como-passo">
+          <span class="como-num">3</span>
+          <p>Professor libera a fase, alunos montam o programa</p>
+        </div>
+        <div class="como-passo">
+          <span class="como-num">4</span>
+          <p>Quem acertar ganha pontos e vai pro ranking</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="bottom-nav" id="bottomNav">
+  <button onclick="router('home')" class="bn-btn active" id="nav-home">
+    <span class="bn-icon">&#8962;</span><span>Inicio</span>
+  </button>
+  <button onclick="router('professor')" class="bn-btn" id="nav-professor">
+    <span class="bn-icon">&#9881;</span><span>Professor</span>
+  </button>
+  <button onclick="router('jogar')" class="bn-btn" id="nav-jogar">
+    <span class="bn-icon">&#9654;</span><span>Jogar</span>
+  </button>
+</nav>
+
+<script src="script.js"></script>
+</body>
+</html>
