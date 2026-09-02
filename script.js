@@ -394,6 +394,17 @@ function proximaFase() {
   }
 }
 
+function pularFase() {
+  if (!confirm('Pular esta fase sem pontos?')) return;
+  if (estado.fase < FASES.length - 1) {
+    estado.fase++;
+    carregarFase();
+    salvarRanking().then(function() { renderRankingMini(); });
+  } else {
+    proximaFase();
+  }
+}
+
 // ===== RANKING (Supabase) =====
 async function salvarRanking() {
   var tempo = Math.floor((Date.now() - estado.inicio) / 1000);
