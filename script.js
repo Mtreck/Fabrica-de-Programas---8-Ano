@@ -146,12 +146,21 @@ function sairProf() {
 function router(view) {
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
   document.querySelectorAll('.bn-btn').forEach(function(b) { b.classList.remove('active'); });
-  var el = document.getElementById('view-' + view);
+  var viewId = view === 'prof-cadastro' ? 'professor' : view;
+  var el = document.getElementById('view-' + viewId);
   if (el) el.classList.add('active');
-  var nav = document.getElementById('nav-' + view);
+  var nav = document.getElementById('nav-' + viewId);
   if (nav) nav.classList.add('active');
-  if (view === 'professor') {
-    if (profLogado()) {
+  if (view === 'professor' || view === 'prof-cadastro') {
+    if (view === 'prof-cadastro') {
+      document.getElementById('profLoginBox').classList.add('hidden');
+      document.getElementById('profCadastroBox').classList.remove('hidden');
+      document.getElementById('profPainel').classList.add('hidden');
+      document.getElementById('profCadErro').classList.add('hidden');
+      document.getElementById('profCadNome').value = '';
+      document.getElementById('profCadSenha').value = '';
+      document.getElementById('profCadConfirma').value = '';
+    } else if (profLogado()) {
       document.getElementById('profLoginBox').classList.add('hidden');
       document.getElementById('profCadastroBox').classList.add('hidden');
       document.getElementById('profPainel').classList.remove('hidden');
@@ -169,15 +178,6 @@ function router(view) {
       document.getElementById('profNomeInput').value = '';
       document.getElementById('profSenhaInput').value = '';
     }
-  }
-  if (view === 'prof-cadastro') {
-    document.getElementById('profLoginBox').classList.add('hidden');
-    document.getElementById('profCadastroBox').classList.remove('hidden');
-    document.getElementById('profPainel').classList.add('hidden');
-    document.getElementById('profCadErro').classList.add('hidden');
-    document.getElementById('profCadNome').value = '';
-    document.getElementById('profCadSenha').value = '';
-    document.getElementById('profCadConfirma').value = '';
   }
   if (view === 'jogar') {
     if (!estado.nome) {
