@@ -182,42 +182,88 @@
         <h2>Painel do Professor</h2>
         <button class="btn-sm btn-danger" onclick="sairProf()">Sair</button>
       </div>
-      <div class="prof-header-row">
-        <div class="prof-sala-info">
-          <input id="salaInput" value="SALA-7A" type="text">
-          <select id="jogoSelect" onchange="mudarJogo()">
-            <option value="algoritmos">Jogo: Algoritmos</option>
-            <option value="quiz">Jogo: Quiz</option>
-          </select>
+    </div>
+
+    <!-- Atividades disponiveis -->
+    <div class="prof-hub">
+      <div class="hub-card" onclick="criarSalaModal('algoritmos')">
+        <div class="hub-card-icon">&#128218;</div>
+        <h3>Algoritmos</h3>
+        <p>Construa programas com blocos</p>
+      </div>
+      <div class="hub-card" onclick="criarSalaModal('quiz')">
+        <div class="hub-card-icon">&#10067;</div>
+        <h3>Quiz</h3>
+        <p>Perguntas de multipla escolha</p>
+      </div>
+    </div>
+
+    <!-- Salas criadas -->
+    <h3 class="prof-section-title">Salas criadas</h3>
+    <div id="listaSalas" class="lista-salas"></div>
+  </div>
+
+  <!-- MODAL: Criar sala -->
+  <div id="modalCriarSala" class="modal-overlay hidden" onclick="fecharModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <h2>Criar sala de <span id="modalJogoTipo"></span></h2>
+      <input id="modalSalaNome" type="text" placeholder="Nome da sala (ex: Sala 7A)" maxlength="20" autocomplete="off">
+      <p id="modalSalaErro" class="prof-senha-erro hidden"></p>
+      <div class="modal-btns">
+        <button class="btn-sm" onclick="document.getElementById('modalCriarSala').classList.add('hidden')">Cancelar</button>
+        <button class="btn-sm btn-accent" onclick="criarSala()">Criar sala</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETALHE DA SALA -->
+  <div id="view-sala" class="page page-sala">
+    <div class="sala-top-bar">
+      <button class="btn-sm" onclick="voltarHub()">&larr; Voltar</button>
+      <h2 id="salaNomeTopo"></h2>
+      <span id="salaStatusBadge" class="sala-status-badge"></span>
+    </div>
+    <div class="sala-grid">
+      <div class="sala-col-esq">
+        <div class="sala-qr-box">
+          <img id="salaQrImg" src="" alt="QR">
+          <p id="salaQrLink" class="qr-link"></p>
+          <button class="btn-sm" onclick="copiarLinkSala()">Copiar link</button>
         </div>
-        <button class="btn-sm" onclick="gerarQR()">QR Code</button>
+        <div class="sala-actions">
+          <button id="btnFecharAbrirSala" class="btn-sm btn-danger" onclick="toggleSala()"></button>
+          <button class="btn-sm btn-accent" onclick="liberarFasesSala()">Liberar fases</button>
+          <button class="btn-sm btn-danger" onclick="deletarSalaAtual()">Deletar sala</button>
+        </div>
       </div>
-      <div id="qrBox" class="qr-box hidden">
-        <img id="qrImg" src="" alt="QR">
-        <p id="qrLink" class="qr-link"></p>
-        <button class="btn-sm" onclick="copiarLink()">Copiar link</button>
+      <div class="sala-col-dir">
+        <div class="sala-alunos-box">
+          <h3>Alunos na sala</h3>
+          <div id="salaListaAlunos" class="sala-alunos-lista"></div>
+        </div>
+        <div class="sala-ranking-box">
+          <h3>Ranking</h3>
+          <div id="salaRanking" class="ranking-prof"></div>
+        </div>
       </div>
     </div>
 
-    <!-- TABS -->
-    <div class="prof-tabs">
-      <button class="prof-tab active" onclick="profTab('ranking')">Ranking</button>
-      <button class="prof-tab" onclick="profTab('alunos')">Alunos</button>
-      <button class="prof-tab" onclick="profTab('fases')">Fases</button>
-      <button class="prof-tab" onclick="profTab('quiz')">Quiz</button>
+    <!-- Tabs dentro da sala -->
+    <div class="prof-tabs" style="margin-top:12px">
+      <button class="prof-tab active" onclick="salaTab('ranking')">Ranking</button>
+      <button class="prof-tab" onclick="salaTab('alunos')">Alunos</button>
+      <button class="prof-tab" onclick="salaTab('fases')">Fases</button>
+      <button class="prof-tab" onclick="salaTab('quiz')">Quiz</button>
     </div>
 
-    <!-- Tab: Ranking -->
-    <div id="tab-ranking" class="prof-tab-content active">
+    <div id="stab-ranking" class="prof-tab-content active">
       <div class="prof-card ranking-card">
         <h2>Ranking ao vivo</h2>
-        <div id="rankingProf" class="ranking-prof"></div>
+        <div id="salaRankingTab" class="ranking-prof"></div>
         <button class="btn-sm btn-danger" style="margin-top:10px" onclick="limparRanking()">Zerar ranking</button>
       </div>
     </div>
-
-    <!-- Tab: Alunos -->
-    <div id="tab-alunos" class="prof-tab-content">
+    <div id="stab-alunos" class="prof-tab-content">
       <div class="prof-card">
         <h3>Cadastrar aluno</h3>
         <div class="prof-form-row">
@@ -236,9 +282,7 @@
         <div id="listaJogadores" class="lista-jogadores"></div>
       </div>
     </div>
-
-    <!-- Tab: Fases -->
-    <div id="tab-fases" class="prof-tab-content">
+    <div id="stab-fases" class="prof-tab-content">
       <div class="prof-card">
         <h3>Criar fase customizada</h3>
         <div class="prof-form">
@@ -258,9 +302,7 @@
         <div id="listaFasesCustom" class="lista-fases"></div>
       </div>
     </div>
-
-    <!-- Tab: Quiz -->
-    <div id="tab-quiz" class="prof-tab-content">
+    <div id="stab-quiz" class="prof-tab-content">
       <div class="prof-card">
         <h3>Criar pergunta do quiz</h3>
         <div class="prof-form">

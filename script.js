@@ -75,6 +75,8 @@ async function salvarProgresso() {
   }).eq('nome', estado.nome);
 }
 
+var estadoSalaAtual = null; // sala selecionada pelo professor
+
 // ===== PROFESSOR AUTH =====
 function profLogado() {
   return sessionStorage.getItem('fabrica_prof_nome') || '';
@@ -98,12 +100,7 @@ async function entrarProf() {
   document.getElementById('profLoginBox').classList.add('hidden');
   document.getElementById('profCadastroBox').classList.add('hidden');
   document.getElementById('profPainel').classList.remove('hidden');
-  renderRankingProf();
-  renderJogadores();
-  renderListaAlunos();
-  renderListaFasesCustom();
-  renderListaQuizPerguntas();
-  gerarQR();
+  renderListaSalas();
 }
 
 async function cadastrarProf() {
@@ -124,17 +121,14 @@ async function cadastrarProf() {
   document.getElementById('profLoginBox').classList.add('hidden');
   document.getElementById('profCadastroBox').classList.add('hidden');
   document.getElementById('profPainel').classList.remove('hidden');
-  renderRankingProf();
-  renderJogadores();
-  renderListaAlunos();
-  renderListaFasesCustom();
-  renderListaQuizPerguntas();
-  gerarQR();
+  renderListaSalas();
 }
 
 function sairProf() {
   sessionStorage.removeItem('fabrica_prof_nome');
+  estadoSalaAtual = null;
   document.getElementById('profPainel').classList.add('hidden');
+  document.getElementById('view-sala').classList.remove('active');
   document.getElementById('profLoginBox').classList.remove('hidden');
   document.getElementById('profCadastroBox').classList.add('hidden');
   document.getElementById('profNomeInput').value = '';
@@ -155,16 +149,13 @@ function router(view) {
       document.getElementById('profLoginBox').classList.add('hidden');
       document.getElementById('profCadastroBox').classList.add('hidden');
       document.getElementById('profPainel').classList.remove('hidden');
-      renderRankingProf();
-      renderJogadores();
-      renderListaAlunos();
-      renderListaFasesCustom();
-      renderListaQuizPerguntas();
-      gerarQR();
+      document.getElementById('view-sala').classList.remove('active');
+      renderListaSalas();
     } else {
       document.getElementById('profLoginBox').classList.remove('hidden');
       document.getElementById('profCadastroBox').classList.add('hidden');
       document.getElementById('profPainel').classList.add('hidden');
+      document.getElementById('view-sala').classList.remove('active');
       document.getElementById('profSenhaErro').classList.add('hidden');
       document.getElementById('profNomeInput').value = '';
       document.getElementById('profSenhaInput').value = '';
@@ -186,36 +177,178 @@ function router(view) {
   location.hash = view;
 }
 
-// ===== PROF TABS =====
-function profTab(tab) {
-  document.querySelectorAll('.prof-tab').forEach(function(t) { t.classList.remove('active'); });
-  document.querySelectorAll('.prof-tab-content').forEach(function(c) { c.classList.remove('active'); });
-  event.target.classList.add('active');
-  document.getElementById('tab-' + tab).classList.add('active');
-  if (tab === 'ranking') renderRankingProf();
-  if (tab === 'alunos') renderListaAlunos();
-  if (tab === 'fases') renderListaFasesCustom();
-  if (tab === 'quiz') renderListaQuizPerguntas();
+// ===== SALAS CRUD =====
+var salaJogoTipo = 'algoritmos';
+
+function criarSalaModal(jogo) {
+  salaJogoTipo = jogo;
+  document.getElementById('modalJogoTipo').textContent = jogo === 'quiz' ? 'Quiz' : 'Algoritmos';
+  document.getElementById('modalSalaNome').value = '';
+  document.getElementById('modalSalaErro').classList.add('hidden');
+  document.getElementById('modalCriarSala').classList.remove('hidden');
+  document.getElementById('modalSalaNome').focus();
 }
 
-// ===== QR CODE =====
-function gerarQR() {
-  var sala = document.getElementById('salaInput') ? document.getElementById('salaInput').value || 'SALA-7A' : 'SALA-7A';
+function fecharModal(e) {
+  if (e.target === document.getElementById('modalCriarSala')) {
+    document.getElementById('modalCriarSala').classList.add('hidden');
+  }
+}
+
+async function criarSala() {
+  var nome = document.getElementById('modalSalaNome').value.trim();
+  var erro = document.getElementById('modalSalaErro');
+  if (!nome) { mostrarErro(erro, 'Digite o nome da sala'); return; }
+
+  var resp = await supabase.from('salas').insert({ nome: nome, jogo: salaJogoTipo });
+  if (resp.error) {
+    mostrarErro(erro, 'Erro: ' + resp.error.message);
+    return;
+  }
+  document.getElementById('modalCriarSala').classList.add('hidden');
+  renderListaSalas();
+}
+
+async function renderListaSalas() {
+  var c = document.getElementById('listaSalas');
+  if (!c) return;
+  var resp = await supabase.from('salas').select('*').order('created_at', { ascending: false });
+  var salas = resp.data || [];
+  if (salas.length === 0) {
+    c.innerHTML = '<p class="hint">Nenhuma sala criada. Clique em uma atividade acima para comecar.</p>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < salas.length; i++) {
+    var s = salas[i];
+    var countResp = await supabase.from('usuarios').select('id', { count: 'exact', head: true }).eq('sala_id', s.id);
+    var count = countResp.count || 0;
+    var iconCls = s.jogo === 'quiz' ? 'quiz' : 'alg';
+    var icon = s.jogo === 'quiz' ? '&#10067;' : '&#128218;';
+    var statusCls = s.ativa ? 'aberta' : 'fechada';
+    var statusTxt = s.ativa ? 'Aberta' : 'Fechada';
+    html += '<div class="sala-card' + (s.ativa ? '' : ' sala-card-fechada') + '" onclick="entrarSala(' + s.id + ')">' +
+      '<div class="sala-card-icon ' + iconCls + '">' + icon + '</div>' +
+      '<div class="sala-card-info"><strong>' + s.nome + '</strong><small>' + s.jogo + ' &middot; ' + count + ' aluno(s)</small></div>' +
+      '<span class="sala-card-badge ' + statusCls + '">' + statusTxt + '</span>' +
+      '</div>';
+  }
+  c.innerHTML = html;
+}
+
+async function entrarSala(id) {
+  var resp = await supabase.from('salas').select('*').eq('id', id).single();
+  if (resp.error || !resp.data) return;
+  estadoSalaAtual = resp.data;
+  document.getElementById('profPainel').classList.add('hidden');
+  document.getElementById('view-sala').classList.add('active');
+  renderSalaDetalhe();
+}
+
+function voltarHub() {
+  estadoSalaAtual = null;
+  document.getElementById('view-sala').classList.remove('active');
+  document.getElementById('profPainel').classList.remove('hidden');
+  renderListaSalas();
+}
+
+async function renderSalaDetalhe() {
+  if (!estadoSalaAtual) return;
+  var s = estadoSalaAtual;
+  document.getElementById('salaNomeTopo').textContent = s.nome;
+  var badge = document.getElementById('salaStatusBadge');
+  badge.textContent = s.ativa ? 'Aberta' : 'Fechada';
+  badge.className = 'sala-status-badge ' + (s.ativa ? 'aberta' : 'fechada');
+  var btnFechar = document.getElementById('btnFecharAbrirSala');
+  btnFechar.textContent = s.ativa ? 'Fechar sala' : 'Abrir sala';
+  btnFechar.className = 'btn-sm ' + (s.ativa ? 'btn-danger' : 'btn-accent');
+
   var base = location.href.split('#')[0].split('?')[0];
   var link = base + '#jogar';
   var url = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(link);
-  document.getElementById('qrImg').src = url;
-  document.getElementById('qrLink').textContent = link + '?sala=' + encodeURIComponent(sala);
-  document.getElementById('qrBox').classList.remove('hidden');
+  document.getElementById('salaQrImg').src = url;
+  document.getElementById('salaQrLink').textContent = link + '?sala=' + encodeURIComponent(s.nome);
+
+  renderAlunosSala();
+  renderRankingSala();
+  renderListaAlunos();
+  renderJogadores();
+  renderListaFasesCustom();
+  renderListaQuizPerguntas();
 }
 
-function copiarLink() {
-  var t = document.getElementById('qrLink').textContent;
+async function toggleSala() {
+  if (!estadoSalaAtual) return;
+  var novoStatus = !estadoSalaAtual.ativa;
+  await supabase.from('salas').update({ ativa: novoStatus }).eq('id', estadoSalaAtual.id);
+  estadoSalaAtual.ativa = novoStatus;
+  renderSalaDetalhe();
+}
+
+async function deletarSalaAtual() {
+  if (!estadoSalaAtual) return;
+  if (!confirm('Deletar sala "' + estadoSalaAtual.nome + '"?')) return;
+  await supabase.from('usuarios').update({ sala_id: null }).eq('sala_id', estadoSalaAtual.id);
+  await supabase.from('salas').delete().eq('id', estadoSalaAtual.id);
+  voltarHub();
+}
+
+function copiarLinkSala() {
+  var t = document.getElementById('salaQrLink').textContent;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(t).then(function() { alert('Link copiado!'); });
   } else {
     prompt('Copie o link:', t);
   }
+}
+
+async function renderAlunosSala() {
+  var c = document.getElementById('salaListaAlunos');
+  if (!c || !estadoSalaAtual) return;
+  var resp = await supabase.from('usuarios').select('*').eq('sala_id', estadoSalaAtual.id).order('nome');
+  var alunos = resp.data || [];
+  if (alunos.length === 0) {
+    c.innerHTML = '<p class="hint">Nenhum aluno na sala</p>';
+    return;
+  }
+  c.innerHTML = alunos.map(function(a) {
+    return '<div class="sala-aluno-item">' +
+      '<span class="sala-aluno-nome">' + a.nome + '</span>' +
+      '<span class="sala-aluno-pontos">' + (a.pontos || 0) + ' pts</span>' +
+      '<button class="sala-aluno-remove" onclick="event.stopPropagation();removerAlunoSala(' + a.id + ')">&times;</button>' +
+      '</div>';
+  }).join('');
+}
+
+async function removerAlunoSala(id) {
+  await supabase.from('usuarios').update({ sala_id: null }).eq('id', id);
+  renderAlunosSala();
+}
+
+// ===== SALA TABS =====
+function salaTab(tab) {
+  document.querySelectorAll('#view-sala .prof-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('#view-sala .prof-tab-content').forEach(function(c) { c.classList.remove('active'); });
+  event.target.classList.add('active');
+  document.getElementById('stab-' + tab).classList.add('active');
+  if (tab === 'ranking') renderRankingSala();
+  if (tab === 'alunos') { renderListaAlunos(); renderJogadores(); }
+  if (tab === 'fases') renderListaFasesCustom();
+  if (tab === 'quiz') renderListaQuizPerguntas();
+}
+
+async function renderRankingSala() {
+  var c = document.getElementById('salaRankingTab');
+  if (!c) return;
+  var resp = await supabase.from('ranking').select('*').order('pontos', { ascending: false }).limit(20);
+  var arr = resp.data || [];
+  if (arr.length === 0) {
+    c.innerHTML = '<p class="ranking-vazio">Ninguem jogou ainda.</p>';
+    return;
+  }
+  c.innerHTML = arr.map(function(r, i) {
+    return montarRankRow(r, i, false);
+  }).join('');
 }
 
 // ===== CONTROLE DE FASES (Supabase) =====
@@ -589,19 +722,6 @@ function montarRankRow(r, i, ehEu) {
     '<span class="rank-pontos">' + r.pontos + '</span></div>';
 }
 
-async function renderRankingProf() {
-  var c = document.getElementById('rankingProf');
-  if (!c) return;
-  var arr = await getRanking();
-  if (arr.length === 0) {
-    c.innerHTML = '<p class="ranking-vazio">Ninguem jogou ainda. Projete o QR e aguarde.</p>';
-    return;
-  }
-  c.innerHTML = arr.map(function(r, i) {
-    return montarRankRow(r, i, false);
-  }).join('');
-}
-
 async function renderRankingMini() {
   var c = document.getElementById('rankingMini');
   if (!c) return;
@@ -618,7 +738,7 @@ async function renderRankingMini() {
 async function limparRanking() {
   if (confirm('Zerar ranking de todos?')) {
     await supabase.from('ranking').delete().neq('id', 0);
-    renderRankingProf();
+    renderRankingSala();
     renderRankingMini();
   }
 }
@@ -709,7 +829,10 @@ async function cadastrarAluno() {
   if (nome.length < 2) { mostrarErro(msg, 'Nome precisa ter pelo menos 2 letras'); return; }
   if (!senha) { mostrarErro(msg, 'Digite uma senha'); return; }
 
-  var resp = await supabase.from('usuarios').insert({ nome: nome, senha: senha });
+  var dados = { nome: nome, senha: senha };
+  if (estadoSalaAtual) dados.sala_id = estadoSalaAtual.id;
+
+  var resp = await supabase.from('usuarios').insert(dados);
   if (resp.error) {
     mostrarErro(msg, 'Erro: ' + resp.error.message);
     return;
@@ -720,13 +843,16 @@ async function cadastrarAluno() {
   msg.textContent = 'Aluno "' + nome + '" cadastrado!';
   document.getElementById('novoAlunoNome').value = '';
   renderListaAlunos();
+  if (estadoSalaAtual) renderAlunosSala();
   setTimeout(function() { msg.textContent = ''; }, 3000);
 }
 
 async function renderListaAlunos() {
   var c = document.getElementById('listaAlunos');
   if (!c) return;
-  var resp = await supabase.from('usuarios').select('*').order('nome');
+  var query = supabase.from('usuarios').select('*');
+  if (estadoSalaAtual) query = query.eq('sala_id', estadoSalaAtual.id);
+  var resp = await query.order('nome');
   var lista = resp.data || [];
   if (lista.length === 0) {
     c.innerHTML = '<p class="hint">Nenhum aluno cadastrado</p>';
@@ -755,6 +881,7 @@ async function deletarAluno(nome) {
   if (!confirm('Deletar aluno "' + nome + '"?')) return;
   await supabase.from('usuarios').delete().eq('nome', nome);
   renderListaAlunos();
+  if (estadoSalaAtual) renderAlunosSala();
 }
 
 // ===== PROFESSOR: FASES CUSTOMIZADAS =====
@@ -877,7 +1004,7 @@ supabase
   .channel('all-changes')
   .on('postgres_changes', { event: '*', schema: 'public', table: 'ranking' }, function() {
     renderRankingMini();
-    renderRankingProf();
+    renderRankingSala();
   })
   .on('postgres_changes', { event: '*', schema: 'public', table: 'fases_liberadas' }, function() {
     checarFaseLiberada();
