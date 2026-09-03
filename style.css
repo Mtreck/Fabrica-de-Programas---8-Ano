@@ -177,66 +177,75 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .prof-cadastro-link{font-size:13px;color:var(--muted);margin-top:12px}
 .prof-cadastro-link a{color:var(--accent);text-decoration:none;font-weight:700;cursor:pointer}
 .prof-cadastro-link a:hover{text-decoration:underline}
-.prof-header{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.prof-header{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
 .prof-header-top{display:flex;justify-content:space-between;align-items:center}
+.prof-header-top h2{font-size:20px;font-weight:900}
 
 /* ===== HUB CARDS ===== */
-.prof-hub{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
-.hub-card{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:24px 16px;text-align:center;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
-.hub-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 16px rgba(232,93,4,.15)}
-.hub-card:active{transform:scale(.98)}
-.hub-card-icon{font-size:36px;margin-bottom:8px}
-.hub-card h3{font-size:16px;margin-bottom:4px}
-.hub-card p{font-size:13px;color:var(--muted)}
-.prof-section-title{font-size:15px;color:var(--muted);margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.prof-hub{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px}
+.hub-card{border-radius:16px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.hub-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;opacity:0;transition:opacity .25s}
+.hub-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.hub-card:active{transform:scale(.97)}
+.hub-card:first-child{background:linear-gradient(135deg,#fff5eb,#fff0e0);border:2px solid #f4a261}
+.hub-card:first-child:hover{box-shadow:0 8px 24px rgba(244,162,97,.25)}
+.hub-card:last-child{background:linear-gradient(135deg,#eef4ff,#e0ecff);border:2px solid #90b8f8}
+.hub-card:last-child:hover{box-shadow:0 8px 24px rgba(58,134,255,.25)}
+.hub-card-icon{font-size:42px;margin-bottom:10px;display:block}
+.hub-card h3{font-size:18px;margin-bottom:4px;font-weight:900}
+.hub-card p{font-size:13px;color:var(--muted);line-height:1.4}
+.prof-section-title{font-size:14px;color:var(--muted);margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 
 /* ===== LISTA SALAS ===== */
 .lista-salas{display:flex;flex-direction:column;gap:8px}
-.sala-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s}
-.sala-card:hover{border-color:var(--accent);box-shadow:var(--shadow)}
-.sala-card-fechada{border-color:var(--red);opacity:.7}
-.sala-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.sala-card-icon.alg{background:#fff3e0}
-.sala-card-icon.quiz{background:#e3f2fd}
+.sala-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
+.sala-card:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.sala-card-fechada{border-color:var(--red);opacity:.6}
+.sala-card-fechada:hover{border-color:var(--red);opacity:.8}
+.sala-card-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.sala-card-icon.alg{background:linear-gradient(135deg,#fff5eb,#ffe8d0)}
+.sala-card-icon.quiz{background:linear-gradient(135deg,#eef4ff,#dde8ff)}
 .sala-card-info{flex:1}
-.sala-card-info strong{display:block;font-size:14px}
+.sala-card-info strong{display:block;font-size:15px;margin-bottom:2px}
 .sala-card-info small{color:var(--muted);font-size:12px}
-.sala-card-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0}
+.sala-card-badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0;text-transform:uppercase;letter-spacing:.3px}
 .sala-card-badge.aberta{background:#d4edda;color:#155724}
 .sala-card-badge.fechada{background:#f8d7da;color:#721c24}
 
 /* ===== MODAL ===== */
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}
-.modal-card{background:var(--card);border-radius:16px;padding:24px;width:100%;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
-.modal-card h2{font-size:18px;margin-bottom:12px}
-.modal-card input{width:100%;padding:12px;border:2px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:16px;outline:none;text-align:center}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal-card{background:var(--card);border-radius:20px;padding:28px 24px;width:100%;max-width:360px;box-shadow:0 12px 40px rgba(0,0,0,.25);animation:modalIn .2s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-card h2{font-size:20px;margin-bottom:16px;font-weight:900}
+.modal-card input{width:100%;padding:14px;border:2px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:16px;outline:none;text-align:center}
 .modal-card input:focus{border-color:var(--accent)}
-.modal-btns{display:flex;gap:8px;margin-top:12px}
-.modal-btns .btn-sm{flex:1;padding:12px}
-.btn-accent{background:var(--accent)}
+.modal-btns{display:flex;gap:8px;margin-top:16px}
+.modal-btns .btn-sm{flex:1;padding:14px;font-size:14px}
 
 /* ===== SALA DETALHE ===== */
-.page-sala{padding:16px 16px 80px;max-width:900px;margin:0 auto}
-.sala-top-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.sala-top-bar h2{flex:1;font-size:18px}
-.sala-status-badge{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700}
+.page-sala{padding:16px 16px 80px;max-width:960px;margin:0 auto}
+.sala-top-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow)}
+.sala-top-bar h2{flex:1;font-size:20px;font-weight:900}
+.sala-status-badge{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
 .sala-status-badge.aberta{background:#d4edda;color:#155724}
 .sala-status-badge.fechada{background:#f8d7da;color:#721c24}
-.sala-grid{display:grid;grid-template-columns:280px 1fr;gap:16px}
+.sala-grid{display:grid;grid-template-columns:280px 1fr;gap:16px;margin-bottom:16px}
 .sala-col-esq{display:flex;flex-direction:column;gap:12px}
 .sala-col-dir{display:flex;flex-direction:column;gap:12px}
-.sala-qr-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
-.sala-qr-box img{width:180px;height:180px;border-radius:8px}
-.sala-qr-box .qr-link{font-size:10px;color:var(--muted);word-break:break-all;margin:6px 0;font-family:'Fira Code',monospace}
-.sala-actions{display:flex;flex-direction:column;gap:6px}
-.sala-actions .btn-sm{width:100%;padding:10px;text-align:center}
-.sala-alunos-box,.sala-ranking-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
-.sala-alunos-box h3,.sala-ranking-box h3{font-size:14px;margin-bottom:8px}
-.sala-alunos-lista{display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto}
-.sala-aluno-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg);border-radius:8px;font-size:13px}
+.sala-qr-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow)}
+.sala-qr-box img{width:180px;height:180px;border-radius:12px;border:2px solid var(--border)}
+.sala-qr-box .qr-link{font-size:10px;color:var(--muted);word-break:break-all;margin:8px 0;font-family:'Fira Code',monospace}
+.sala-actions{display:flex;flex-direction:column;gap:8px}
+.sala-actions .btn-sm{width:100%;padding:12px;text-align:center;font-size:13px}
+.sala-alunos-box,.sala-ranking-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.sala-alunos-box h3,.sala-ranking-box h3{font-size:14px;margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
+.sala-alunos-lista{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto}
+.sala-aluno-item{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);border-radius:10px;font-size:13px;transition:background .15s}
+.sala-aluno-item:hover{background:#f0ede8}
 .sala-aluno-nome{flex:1;font-weight:700}
-.sala-aluno-pontos{background:var(--accent);color:#fff;padding:2px 8px;border-radius:12px;font-weight:700;font-size:11px}
-.sala-aluno-remove{background:var(--red);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sala-aluno-pontos{background:var(--accent);color:#fff;padding:3px 10px;border-radius:12px;font-weight:700;font-size:11px}
+.sala-aluno-remove{background:var(--red);color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.sala-aluno-remove:hover{transform:scale(1.1)}
 .prof-header-row{display:flex;gap:8px;align-items:center}
 .prof-sala-info{display:flex;gap:6px;flex:1}
 .prof-sala-info input{flex:1;padding:8px 10px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;outline:none}
@@ -245,9 +254,10 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .qr-box{background:#fff;border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;margin:10px 0}
 .qr-box img{width:180px;height:180px;border-radius:8px}
 .qr-link{font-size:11px;color:var(--muted);word-break:break-all;margin-top:6px;font-family:'Fira Code',monospace}
-.btn-sm{padding:8px 12px;background:var(--text);color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0}
-.btn-sm:hover{opacity:.85}
+.btn-sm{padding:8px 14px;background:var(--text);color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:all .15s}
+.btn-sm:hover{opacity:.85;transform:translateY(-1px)}
 .btn-danger{background:var(--red)}
+.btn-accent{background:var(--accent)}
 
 /* ===== PROF TABS ===== */
 .prof-tabs{display:flex;gap:4px;margin-bottom:12px;background:var(--card);border-radius:var(--radius);padding:4px;border:1px solid var(--border)}
