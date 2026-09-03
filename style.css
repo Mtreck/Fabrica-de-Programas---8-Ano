@@ -182,17 +182,12 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .prof-header-top h2{font-size:20px;font-weight:900}
 
 /* ===== HUB CARDS ===== */
-.prof-hub{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px}
-.hub-card{border-radius:16px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
-.hub-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;opacity:0;transition:opacity .25s}
+.prof-hub{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;max-width:600px}
+.hub-card{background:#fff;border:2px solid var(--border);border-radius:16px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .hub-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
 .hub-card:active{transform:scale(.97)}
-.hub-card:first-child{background:linear-gradient(135deg,#fff5eb,#fff0e0);border:2px solid #f4a261}
-.hub-card:first-child:hover{box-shadow:0 8px 24px rgba(244,162,97,.25)}
-.hub-card:last-child{background:linear-gradient(135deg,#eef4ff,#e0ecff);border:2px solid #90b8f8}
-.hub-card:last-child:hover{box-shadow:0 8px 24px rgba(58,134,255,.25)}
-.hub-card-icon{font-size:42px;margin-bottom:10px;display:block}
-.hub-card h3{font-size:18px;margin-bottom:4px;font-weight:900}
+.hub-card-icon{font-size:48px;margin-bottom:12px;display:block}
+.hub-card h3{font-size:18px;margin-bottom:6px;font-weight:900}
 .hub-card p{font-size:13px;color:var(--muted);line-height:1.4}
 .prof-section-title{font-size:14px;color:var(--muted);margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 
