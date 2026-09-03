@@ -1015,6 +1015,66 @@ async function deletarPerguntaQuiz(id) {
   renderListaQuizPerguntas();
 }
 
+// ===== QUIZ: CRIACAO EM MASSA =====
+function copiarModeloQuiz() {
+  var texto = document.getElementById('quizModeloPre').textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(texto).then(function() { alert('Modelo copiado! Cole no ChatGPT ou outra IA.'); });
+  } else {
+    prompt('Copie o modelo:', texto);
+  }
+}
+
+async function salvarQuizEmMassa() {
+  var raw = document.getElementById('quizBulkInput').value.trim();
+  var msg = document.getElementById('quizBulkMsg');
+  if (!raw) { mostrarErro(msg, 'Cole as perguntas no campo'); return; }
+
+  var blocos = raw.split(/\n\s*\n/).filter(function(b) { return b.trim(); });
+  var criadas = 0;
+  var erros = 0;
+
+  for (var i = 0; i < blocos.length; i++) {
+    var linhas = blocos[i].split('\n').map(function(l) { return l.trim(); }).filter(Boolean);
+    var pergunta = '';
+    var alternativas = [];
+    var resposta = -1;
+
+    for (var j = 0; j < linhas.length; j++) {
+      var l = linhas[j];
+      if (l.toUpperCase().indexOf('PERGUNTA:') === 0) {
+        pergunta = l.substring(9).trim();
+      } else if (l.toUpperCase().indexOf('ALT:') === 0) {
+        alternativas.push(l.substring(4).trim());
+      } else if (l.toUpperCase().indexOf('RESPOSTA:') === 0) {
+        resposta = parseInt(l.substring(9).trim()) - 1;
+      }
+    }
+
+    if (!pergunta || alternativas.length < 2 || resposta < 0 || resposta >= alternativas.length) {
+      erros++;
+      continue;
+    }
+
+    var resp = await supabase.from('quiz_perguntas').insert({
+      pergunta: pergunta,
+      alternativas: alternativas,
+      resposta_correta: resposta,
+      ordem: quizPerguntasCache.length + criadas
+    });
+    if (!resp.error) criadas++;
+    else erros++;
+  }
+
+  await carregarQuizPerguntas();
+  renderListaQuizPerguntas();
+  document.getElementById('quizBulkInput').value = '';
+  mostrarErro(msg, criadas + ' pergunta(s) criada(s)' + (erros > 0 ? ', ' + erros + ' com erro' : ''));
+  msg.style.color = erros > 0 ? 'var(--red)' : 'var(--green)';
+  msg.classList.remove('hidden');
+  setTimeout(function() { msg.classList.add('hidden'); }, 4000);
+}
+
 // ===== REALTIME =====
 supabase
   .channel('all-changes')

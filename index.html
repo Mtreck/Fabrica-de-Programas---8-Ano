@@ -6,7 +6,7 @@
 <title>Criando Algoritmos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 
@@ -289,21 +289,76 @@
     <!-- Tab: Quiz (apenas para salas de quiz) -->
     <div id="stab-quiz" class="prof-tab-content">
       <div class="prof-card">
-        <h3>Criar pergunta do quiz</h3>
-        <div class="prof-form">
-          <textarea id="quizPerguntaInput" rows="2" placeholder="Pergunta"></textarea>
-          <label class="form-label">Alternativas (uma por linha)</label>
-          <textarea id="quizAlternativasInput" rows="4" placeholder="Alternativa 1&#10;Alternativa 2&#10;Alternativa 3&#10;Alternativa 4"></textarea>
-          <label class="form-label">Resposta correta (numero da alternativa, comecando em 1)</label>
-          <input id="quizRespostaInput" type="number" min="1" value="1" placeholder="1">
-          <button class="btn-entrar" onclick="salvarPerguntaQuiz()">Salvar pergunta</button>
+        <div class="quiz-header-row">
+          <h3>Criar perguntas</h3>
+          <button class="btn-sm quiz-info-btn" onclick="document.getElementById('modalQuizModelo').classList.remove('hidden')">&#9432; Modelo IA</button>
         </div>
+
+        <!-- Criacao em massa -->
+        <div class="quiz-bulk-section">
+          <div class="quiz-bulk-header">
+            <strong>Criar varias de uma vez</strong>
+            <button class="btn-sm" onclick="document.getElementById('quizBulkArea').classList.toggle('hidden')">Abrir/Fechar</button>
+          </div>
+          <div id="quizBulkArea" class="hidden">
+            <label class="form-label">Cole varias perguntas de uma vez (uma por bloco)</label>
+            <textarea id="quizBulkInput" rows="10" placeholder="PERGUNTA: Qual e 2+2?&#10;ALT: 3&#10;ALT: 4&#10;ALT: 5&#10;ALT: 6&#10;RESPOSTA: 2&#10;&#10;PERGUNTA: Capital do Brasil?&#10;ALT: Sao Paulo&#10;ALT: Rio de Janeiro&#10;ALT: Brasilia&#10;ALT: Salvador&#10;RESPOSTA: 3"></textarea>
+            <button class="btn-entrar" onclick="salvarQuizEmMassa()">Salvar todas as perguntas</button>
+            <p id="quizBulkMsg" class="login-erro hidden"></p>
+          </div>
+        </div>
+
+        <!-- Criacao individual -->
+        <details class="quiz-single-toggle">
+          <summary>Criar pergunta individual</summary>
+          <div class="prof-form" style="margin-top:10px">
+            <textarea id="quizPerguntaInput" rows="2" placeholder="Pergunta"></textarea>
+            <label class="form-label">Alternativas (uma por linha)</label>
+            <textarea id="quizAlternativasInput" rows="4" placeholder="Alternativa 1&#10;Alternativa 2&#10;Alternativa 3&#10;Alternativa 4"></textarea>
+            <label class="form-label">Resposta correta (numero da alternativa, comecando em 1)</label>
+            <input id="quizRespostaInput" type="number" min="1" value="1" placeholder="1">
+            <button class="btn-entrar" onclick="salvarPerguntaQuiz()">Salvar pergunta</button>
+          </div>
+        </details>
       </div>
       <div class="prof-card">
         <h3>Perguntas existentes</h3>
         <div id="listaQuizPerguntas" class="lista-quiz"></div>
       </div>
     </div>
+  </div>
+
+  <!-- MODAL: Modelo IA -->
+  <div id="modalQuizModelo" class="modal-overlay hidden" onclick="if(event.target===this)this.classList.add('hidden')">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <h2>Modelo para gerar perguntas com IA</h2>
+      <p class="login-sub" style="text-align:left;margin-bottom:8px">Copie o modelo abaixo e cole no ChatGPT ou qualquer IA. Troque o conteudo pelo da sua aula e cole no campo "Criar varias de uma vez".</p>
+      <pre class="quiz-modelo-pre" id="quizModeloPre">PERGUNTA: Qual e o resultado de 2 + 2?
+ALT: 3
+ALT: 4
+ALT: 5
+ALT: 6
+RESPOSTA: 2
+
+PERGUNTA: Capital do Brasil?
+ALT: Sao Paulo
+ALT: Rio de Janeiro
+ALT: Brasilia
+ALT: Salvador
+RESPOSTA: 3
+
+PERGUNTA: Quantos lados tem um triangulo?
+ALT: 2
+ALT: 3
+ALT: 4
+ALT: 5
+RESPOSTA: 2</pre>
+      <div class="modal-btns">
+        <button class="btn-sm btn-accent" onclick="copiarModeloQuiz()">Copiar modelo</button>
+        <button class="btn-sm" onclick="document.getElementById('modalQuizModelo').classList.add('hidden')">Fechar</button>
+      </div>
+    </div>
+  </div>
   </div>
 </div>
 
@@ -320,6 +375,6 @@
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js?v=6"></script>
+<script src="script.js?v=7"></script>
 </body>
 </html>
