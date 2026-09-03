@@ -268,20 +268,21 @@ async function renderSalaDetalhe() {
   var url = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(link);
   document.getElementById('salaQrImg').src = url;
 
-  // Montar tabs conforme tipo da sala
-  var tabsHtml = '<button class="prof-tab active" onclick="salaTab(\'ranking\')">Ranking</button>';
-  tabsHtml += '<button class="prof-tab" onclick="salaTab(\'alunos\')">Alunos</button>';
+  // Mostrar tabs conforme tipo da sala
+  var tabFases = document.querySelector('.tab-fases');
+  var tabQuiz = document.querySelector('.tab-quiz');
   if (s.jogo === 'quiz') {
-    tabsHtml += '<button class="prof-tab" onclick="salaTab(\'quiz\')">Quiz</button>';
+    tabFases.style.display = 'none';
+    tabQuiz.style.display = '';
   } else {
-    tabsHtml += '<button class="prof-tab" onclick="salaTab(\'fases\')">Fases</button>';
+    tabFases.style.display = '';
+    tabQuiz.style.display = 'none';
   }
-  document.getElementById('salaTabs').innerHTML = tabsHtml;
 
   // Resetar pra tab ranking
-  document.querySelectorAll('#stab-ranking, #stab-alunos, #stab-fases, #stab-quiz').forEach(function(el) {
-    el.classList.remove('active');
-  });
+  document.querySelectorAll('#salaTabs .prof-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('#view-sala .prof-tab-content').forEach(function(c) { c.classList.remove('active'); });
+  document.querySelector('#salaTabs .prof-tab').classList.add('active');
   document.getElementById('stab-ranking').classList.add('active');
 
   renderAlunosSala();

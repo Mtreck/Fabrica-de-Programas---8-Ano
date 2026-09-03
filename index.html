@@ -230,7 +230,12 @@
     </div>
 
     <!-- Tabs (dinamicas:Ranking + Alunos + Fases OU Quiz) -->
-    <div id="salaTabs" class="prof-tabs"></div>
+    <div id="salaTabs" class="prof-tabs">
+      <button class="prof-tab active" onclick="salaTab('ranking')">Ranking</button>
+      <button class="prof-tab" onclick="salaTab('alunos')">Alunos</button>
+      <button class="prof-tab tab-fases" onclick="salaTab('fases')">Fases</button>
+      <button class="prof-tab tab-quiz" onclick="salaTab('quiz')">Quiz</button>
+    </div>
 
     <!-- Tab: Ranking (sempre presente) -->
     <div id="stab-ranking" class="prof-tab-content active">
@@ -315,6 +320,6 @@
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js?v=5"></script>
+<script src="script.js?v=6"></script>
 </body>
 </html>
