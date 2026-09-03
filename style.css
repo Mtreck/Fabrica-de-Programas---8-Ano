@@ -38,7 +38,6 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .conceito-card strong{display:block;font-size:13px;margin:4px 0 2px}
 .conceito-card p{font-size:11px;color:var(--muted)}
 .conceito-card code{font-family:'Fira Code',monospace;font-size:11px;background:#f0ede8;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:4px}
-.conceito-icon{font-size:24px}
 .conceito-mais,.conceito-igual{font-size:24px;font-weight:900;color:var(--muted)}
 .conceito-prog{border-color:var(--accent);background:#fff8f0}
 
@@ -60,14 +59,16 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .login-icon{font-size:40px;margin-bottom:8px}
 .login-card h2{font-size:20px;font-weight:900}
 .login-sub{color:var(--muted);font-size:13px;margin:4px 0 16px}
-.login-card input{width:100%;padding:12px;border:2px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:16px;outline:none;text-align:center}
+.login-card input{width:100%;padding:12px;border:2px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:16px;outline:none;text-align:center;margin-bottom:8px}
 .login-card input:focus{border-color:var(--accent)}
-.btn-entrar{width:100%;margin-top:12px;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-family:inherit;font-weight:700;font-size:16px;cursor:pointer}
+.btn-entrar{width:100%;margin-top:4px;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-family:inherit;font-weight:700;font-size:16px;cursor:pointer}
+.login-erro{color:var(--red);font-size:13px;margin:8px 0 0}
 
 /* ===== JOGAR HEADER ===== */
 .jogar-header{position:sticky;top:0;z-index:50;background:var(--card);border-radius:var(--radius);padding:10px 12px;margin-bottom:12px;box-shadow:var(--shadow)}
 .jogar-top{display:flex;justify-content:space-between;align-items:center}
 .jogar-nome{font-weight:900;font-size:14px}
+.jogar-modo-badge{background:var(--blue);color:#fff;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;margin-left:6px}
 .jogar-pontos{background:var(--accent);color:#fff;padding:3px 10px;border-radius:20px;font-weight:700;font-size:13px}
 .jogar-fase-bar{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
 .barra{height:6px;background:#eee;border-radius:6px;margin-top:6px;overflow:hidden}
@@ -111,6 +112,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 /* ===== BOTOES DE ACAO ===== */
 .btn-executar{width:100%;padding:16px;background:var(--green);color:#fff;border:none;border-radius:var(--radius);font-family:inherit;font-weight:900;font-size:17px;cursor:pointer;margin-bottom:12px}
 .btn-executar:active{transform:scale(.98)}
+.btn-executar:disabled{opacity:.5;cursor:not-allowed}
 .btn-proxima{width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;margin-top:10px}
 .btn-pular{width:100%;padding:10px;background:none;color:var(--muted);border:1px dashed var(--border);border-radius:var(--radius);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;margin-top:8px}
 .btn-pular:hover{border-color:var(--accent);color:var(--accent)}
@@ -122,7 +124,15 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .feedback{border-radius:var(--radius);padding:16px;font-weight:700;font-size:14px;text-align:center;margin-top:12px;line-height:1.4}
 .feedback.ok{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
 .feedback.err{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
-.feedback.aguardando{background:#fff3cd;color:#856404;border:1px solid #ffeeba}
+
+/* ===== QUIZ ===== */
+.quiz-alternativas{display:flex;flex-direction:column;gap:8px}
+.quiz-alt{background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;text-align:left;font-family:inherit}
+.quiz-alt:active{transform:scale(.98)}
+.quiz-alt.selected{border-color:var(--blue);background:#eef4ff}
+.quiz-alt.correct{border-color:var(--green);background:#d4edda;color:#155724}
+.quiz-alt.wrong{border-color:var(--red);background:#f8d7da;color:#721c24}
+.quiz-alt.disabled{pointer-events:none;opacity:.6}
 
 /* ===== MINI RANKING (Aluno) ===== */
 .mini-ranking{background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:var(--radius);padding:14px;margin-top:20px;color:#fff}
@@ -136,14 +146,14 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .rank-1{background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,215,0,.05))!important;border:1px solid rgba(255,215,0,.3)!important}
 .rank-2{background:linear-gradient(135deg,rgba(192,192,192,.12),rgba(192,192,192,.04))!important;border:1px solid rgba(192,192,192,.25)!important}
 .rank-3{background:linear-gradient(135deg,rgba(205,127,50,.12),rgba(205,127,50,.04))!important;border:1px solid rgba(205,127,50,.25)!important}
-.rank-trapaceou .rank-nome{opacity:.8}
 .rank-aviso{background:rgba(230,57,70,.1)!important;border:1px solid rgba(230,57,70,.25)!important}
 .rank-x{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:var(--red);color:#fff;border-radius:50%;font-size:10px;font-weight:900;margin-left:4px;flex-shrink:0}
+.rank-vazio{color:#a0aec0;font-size:13px;text-align:center;padding:30px 0}
 
 /* ===== RANKING PROFESSOR ===== */
-.ranking-prof{min-height:200px}
 .ranking-card{background:linear-gradient(135deg,#1a1a2e,#16213e)!important;color:#fff;border:none!important}
 .ranking-card h2{color:#fff}
+.ranking-card .btn-danger{margin-top:10px}
 .ranking-prof .rank-row{font-size:14px;padding:10px 14px;background:rgba(255,255,255,.06);border-radius:10px;margin-bottom:6px;color:#fff}
 .ranking-prof .rank-row.rank-1{background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(255,215,0,.05));border:1px solid rgba(255,215,0,.3)}
 .ranking-prof .rank-row.rank-2{background:linear-gradient(135deg,rgba(192,192,192,.15),rgba(192,192,192,.05));border:1px solid rgba(192,192,192,.25)}
@@ -160,54 +170,69 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 /* ===== RANKING ANIMATIONS ===== */
 @keyframes rankPop{0%{transform:scale(1)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
 .rank-row.rank-new{animation:rankPop .4s ease}
-.rank-pulse{animation:pulse 1.5s infinite}
-.prof-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1000px;margin:0 auto}
-.prof-col{display:flex;flex-direction:column;gap:14px}
-.prof-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
-.prof-card h2{font-size:17px;margin-bottom:10px}
-.prof-card h4{font-size:14px;margin-bottom:6px}
-.prof-campo label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase}
-.prof-row{display:flex;gap:6px;margin-top:4px}
-.prof-row input{flex:1;padding:10px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;outline:none}
-.prof-row input:focus{border-color:var(--accent)}
-.btn-sm{padding:8px 12px;background:var(--text);color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer}
-.btn-sm:hover{opacity:.85}
-.btn-danger{background:var(--red)}
-.prof-botoes{display:flex;gap:6px;margin-top:8px}
+
+/* ===== PROFESSOR PANEL ===== */
+.prof-login-box{min-height:60dvh;display:flex;align-items:center;justify-content:center}
+.prof-senha-erro{color:var(--red);font-size:13px;margin:6px 0 0}
+.prof-header{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.prof-header h2{font-size:17px;margin-bottom:8px}
+.prof-header-row{display:flex;gap:8px;align-items:center}
+.prof-sala-info{display:flex;gap:6px;flex:1}
+.prof-sala-info input{flex:1;padding:8px 10px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;outline:none}
+.prof-sala-info select{padding:8px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;background:var(--card)}
+.prof-sala-info input:focus,.prof-sala-info select:focus{border-color:var(--accent)}
 .qr-box{background:#fff;border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;margin:10px 0}
 .qr-box img{width:180px;height:180px;border-radius:8px}
 .qr-link{font-size:11px;color:var(--muted);word-break:break-all;margin-top:6px;font-family:'Fira Code',monospace}
-.prof-dicas{background:var(--bg);border-radius:var(--radius);padding:10px;margin-top:10px}
-.prof-dicas h4{font-size:13px;margin-bottom:4px}
-.prof-dicas ul{font-size:12px;color:var(--muted);padding-left:16px}
-.prof-dicas li{margin-bottom:2px}
-.prof-hint{font-size:12px;color:var(--muted);margin-bottom:8px}
+.btn-sm{padding:8px 12px;background:var(--text);color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0}
+.btn-sm:hover{opacity:.85}
+.btn-danger{background:var(--red)}
 
-/* ===== PROF LOGIN ===== */
-.prof-login-box{min-height:60dvh;display:flex;align-items:center;justify-content:center}
-.prof-senha-erro{color:var(--red);font-size:13px;margin:6px 0 0}
+/* ===== PROF TABS ===== */
+.prof-tabs{display:flex;gap:4px;margin-bottom:12px;background:var(--card);border-radius:var(--radius);padding:4px;border:1px solid var(--border)}
+.prof-tab{flex:1;padding:10px 8px;background:none;border:none;border-radius:8px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;color:var(--muted);transition:all .15s}
+.prof-tab.active{background:var(--accent);color:#fff}
+.prof-tab:not(.active):hover{background:var(--bg)}
+.prof-tab-content{display:none}
+.prof-tab-content.active{display:block}
+.prof-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.prof-card h2,.prof-card h3{font-size:16px;margin-bottom:10px}
 
-/* ===== CONTROLE FASES ===== */
-.controle-fases{display:flex;flex-direction:column;gap:6px}
-.ctrl-fase{background:var(--bg);border-radius:8px;border:2px solid transparent;overflow:hidden}
-.ctrl-fase.lib{border-color:var(--green);background:#f0faf8}
-.ctrl-fase-topo{display:flex;align-items:center;gap:8px;padding:8px 10px;cursor:pointer}
-.ctrl-fase-num{width:28px;height:28px;background:var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;flex-shrink:0}
-.ctrl-fase.lib .ctrl-fase-num{background:var(--green);color:#fff}
-.ctrl-fase-info{flex:1;font-size:13px}
-.ctrl-fase-info strong{display:block;font-size:12px}
-.ctrl-fase-seta{font-size:10px;color:var(--muted);transition:transform .2s}
-.ctrl-fase-btn{padding:6px 10px;border:none;border-radius:6px;font-family:inherit;font-weight:700;font-size:11px;cursor:pointer;flex-shrink:0}
-.ctrl-fase-btn.lib{background:var(--green);color:#fff}
-.ctrl-fase-btn.fechar{background:var(--red);color:#fff}
-.ctrl-fase-detalhe{padding:0 10px 10px;border-top:1px dashed var(--border);margin-top:4px}
-.solucao-box{background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px;margin-top:8px}
-.solucao-box strong{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
-.solucao-passo{display:block;font-family:'Fira Code',monospace;font-size:12px;padding:3px 0;color:var(--text)}
-.dica-box{background:#fff8f0;border:1px dashed var(--accent2);border-radius:8px;padding:8px 10px;margin-top:6px;font-size:12px;color:var(--muted)}
-.dica-box strong{font-size:11px;color:var(--accent);text-transform:uppercase}
-.fase-atual-badge{background:var(--accent);color:#fff;padding:2px 10px;border-radius:12px;font-weight:700;font-size:13px}
-.prof-status{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px}
+/* ===== PROF FORMS ===== */
+.prof-form{display:flex;flex-direction:column;gap:8px}
+.prof-form input,.prof-form textarea,.prof-form select{width:100%;padding:10px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;outline:none;resize:vertical}
+.prof-form input:focus,.prof-form textarea:focus,.prof-form select:focus{border-color:var(--accent)}
+.form-label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-top:4px}
+.prof-form-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.prof-form-row input{flex:1;min-width:100px}
+
+/* ===== LISTA ALUNOS ===== */
+.lista-alunos{display:flex;flex-direction:column;gap:6px}
+.aluno-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg);border-radius:8px;font-size:13px}
+.aluno-nome{flex:1;font-weight:700}
+.aluno-senha{color:var(--muted);font-family:'Fira Code',monospace;font-size:12px}
+.aluno-pontos{background:var(--accent);color:#fff;padding:2px 8px;border-radius:12px;font-weight:700;font-size:11px}
+.aluno-btns{display:flex;gap:4px}
+.aluno-btn{padding:4px 8px;border:none;border-radius:6px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer}
+.aluno-btn-reset{background:var(--blue);color:#fff}
+.aluno-btn-reset:hover{opacity:.8}
+.aluno-btn-del{background:var(--red);color:#fff}
+.aluno-btn-del:hover{opacity:.8}
+
+/* ===== LISTA FASES ===== */
+.lista-fases{display:flex;flex-direction:column;gap:6px}
+.fase-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg);border-radius:8px;font-size:13px}
+.fase-row-titulo{flex:1;font-weight:700}
+.fase-row-btn{padding:4px 8px;border:none;border-radius:6px;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;background:var(--red);color:#fff}
+.fase-row-btn:hover{opacity:.8}
+
+/* ===== LISTA QUIZ ===== */
+.lista-quiz{display:flex;flex-direction:column;gap:6px}
+.quiz-row{padding:8px 10px;background:var(--bg);border-radius:8px;font-size:13px}
+.quiz-row-pergunta{font-weight:700;margin-bottom:4px}
+.quiz-row-alt{font-size:12px;color:var(--muted);font-family:'Fira Code',monospace}
+.quiz-row-alt.correta{color:var(--green);font-weight:700}
+.quiz-row-btns{display:flex;gap:4px;margin-top:4px}
 
 /* ===== UTILS ===== */
 .hidden{display:none !important}
@@ -227,6 +252,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
   .bloco{padding:10px 12px;font-size:12px}
   .programa-section{padding:10px}
   .programa-area{min-height:100px}
+  .prof-form-row{flex-direction:column}
+  .prof-form-row input{width:100%}
 }
 @media(max-width:380px){
   .conceito-card{width:90px}

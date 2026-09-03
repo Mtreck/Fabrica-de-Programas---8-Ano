@@ -2,100 +2,80 @@ var SUPABASE_URL = 'https://zgmjscrqndjrrkicvnqj.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnbWpzY3JxbmRqcnJraWN2bnFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzMzYxNDMsImV4cCI6MjEwMzkxMjE0M30.CpT3m4f1or8DBSXibDbu734NSqjqYh2HkJ-f0gSY4t4';
 var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-var FASES = [
-  {
-    titulo: "Fase 1 - Fazer Suco",
-    objetivo: "Monte o programa que faz suco. Algoritmos do dia a dia tambem sao algoritmos!",
-    exemplo: "LARANJA &rarr; SUCO NA JARRA",
-    blocos: ["PEGAR LARANJA", "CORTAR LARANJA", "ESPREMER", "SERVIR NA JARRA", "LIGAR VENTILADOR"],
-    solucao: ["PEGAR LARANJA","CORTAR LARANJA","ESPREMER","SERVIR NA JARRA"],
-    dica: "pegar &rarr; cortar &rarr; espremer &rarr; servir"
-  },
-  {
-    titulo: "Fase 2 - Dobrar Numero",
-    objetivo: "Entrada: 5 | Saida esperada: 10. Use algoritmos matematicos.",
-    exemplo: "ENTRADA: 5 &rarr; SAIDA: 10",
-    blocos: ["PEGAR NUMERO", "MULTIPLICAR POR 2", "SOMAR 5", "MOSTRAR NA TELA", "DIVIDIR POR 2"],
-    solucao: ["PEGAR NUMERO","MULTIPLICAR POR 2","MOSTRAR NA TELA"],
-    dica: "Pegar &rarr; Calcular &rarr; Mostrar"
-  },
-  {
-    titulo: "Fase 3 - Calcular Media",
-    objetivo: "Notas: 7 e 9 | Saida esperada: 8. Um programa junta varios algoritmos!",
-    exemplo: "ENTRADA: [7, 9] &rarr; SAIDA: 8",
-    blocos: ["PEGAR NOTA 1", "PEGAR NOTA 2", "SOMAR NOTAS", "DIVIDIR POR 2", "MOSTRAR NA TELA", "MULTIPLICAR POR 2"],
-    solucao: ["PEGAR NOTA 1","PEGAR NOTA 2","SOMAR NOTAS","DIVIDIR POR 2","MOSTRAR NA TELA"],
-    dica: "Pegue as duas, some, divida, mostre"
-  },
-  {
-    titulo: "Fase 4 - Aprovado ou Reprovado?",
-    objetivo: "Nota 6 = REPROVADO. Nota 8 = APROVADO. Use o algoritmo condicional SE.",
-    exemplo: "6 &rarr; REPROVADO | 8 &rarr; APROVADO",
-    blocos: ["PEGAR NOTA", "SE NOTA >= 7", "MOSTRAR APROVADO", "MOSTRAR REPROVADO", "SOMAR 10"],
-    solucao: ["PEGAR NOTA","SE NOTA >= 7","MOSTRAR APROVADO","MOSTRAR REPROVADO"],
-    dica: "Pegar nota &rarr; Testar condicao &rarr; Mostrar resultado"
-  },
-  {
-    titulo: "Fase 5 - Robo Entregador",
-    objetivo: "O robo precisa andar 3 casas e entregar. Repita o algoritmo ANDAR.",
-    exemplo: "[ROBO _ _ PRESENTE] &rarr; 3x ANDAR + ENTREGAR",
-    blocos: ["ANDAR 1 CASA", "ANDAR 1 CASA", "ANDAR 1 CASA", "ENTREGAR", "VIRAR", "PEGAR NOTA"],
-    solucao: ["ANDAR 1 CASA","ANDAR 1 CASA","ANDAR 1 CASA","ENTREGAR"],
-    dica: "Algoritmo repetido = programa com laco"
-  },
-  {
-    titulo: "Fase 6 - Contar Votos",
-    objetivo: "Receba os votos e conte. Saida: total de votos registrados.",
-    exemplo: "VOTOS: [Ana, Joao, Maria] &rarr; SAIDA: 3",
-    blocos: ["LER VOTO 1", "LER VOTO 2", "LER VOTO 3", "CONTAR TOTAL", "MOSTRAR NA TELA", "LIMPAR LISTA"],
-    solucao: ["LER VOTO 1","LER VOTO 2","LER VOTO 3","CONTAR TOTAL","MOSTRAR NA TELA"],
-    dica: "Leia todos, conte, mostre"
-  },
-  {
-    titulo: "Fase 7 - Filtrar Pares",
-    objetivo: "Entrada: 4 e 7 | Saida: so os numeros pares. Use condicao para filtrar.",
-    exemplo: "ENTRADA: [4, 7] &rarr; SAIDA: [4]",
-    blocos: ["LER NUMERO 1", "LER NUMERO 2", "SE E PAR", "ADICIONAR AO RESULTADO", "MOSTRAR RESULTADO", "IGNORAR"],
-    solucao: ["LER NUMERO 1","SE E PAR","ADICIONAR AO RESULTADO","LER NUMERO 2","SE E PAR","ADICIONAR AO RESULTADO","MOSTRAR RESULTADO"],
-    dica: "Para cada numero, teste se e par antes de adicionar"
-  },
-  {
-    titulo: "Fase 8 - Calcular Preco",
-    objetivo: "Item custa R$10. Com 3 itens e desconto de R$2, quanto paga?",
-    exemplo: "QTD: 3 | PRECO: 10 | DESCONTO: 2 &rarr; SAIDA: 28",
-    blocos: ["LER QUANTIDADE", "LER PRECO UNIT.", "LER DESCONTO", "MULTIPLICAR QTD X PRECO", "SUBTRAIR DESCONTO", "MOSTRAR TOTAL"],
-    solucao: ["LER QUANTIDADE","LER PRECO UNIT.","LER DESCONTO","MULTIPLICAR QTD X PRECO","SUBTRAIR DESCONTO","MOSTRAR TOTAL"],
-    dica: "Leia dados, multiplique, subtraia, mostre"
-  },
-  {
-    titulo: "Fase 9 - Repetir 3 Vezes",
-    objetivo: "O aluno precisa dizer 'obrigado' 3 vezes. Monte o laco com repeticao.",
-    exemplo: "REPETIR 3x: DIZER OBRIGADO &rarr; SAIDA: obrigado, obrigado, obrigado",
-    blocos: ["INICIAR LACO", "DIZER OBRIGADO", "DIZER OBRIGADO", "DIZER OBRIGADO", "FIM DO LACO", "MOSTRAR NA TELA"],
-    solucao: ["INICIAR LACO","DIZER OBRIGADO","FIM DO LACO","MOSTRAR NA TELA"],
-    dica: "Laco envolve a acao que se repete"
-  },
-  {
-    titulo: "Fase 10 - Programa Completo",
-    objetivo: "Junte tudo: leia, calcule, teste condicao, repita, mostre. O grande desafio!",
-    exemplo: "LER NOTA &rarr; SE >= 7 &rarr; APROVAR &rarr; MOSTRAR",
-    blocos: ["LER DADOS", "CALCULAR MEDIA", "SE MEDIA >= 7", "APROVAR", "REPROVAR", "REPETIR 2x VERIFICAR", "MOSTRAR RESULTADO FINAL"],
-    solucao: ["LER DADOS","CALCULAR MEDIA","SE MEDIA >= 7","APROVAR","REPROVAR","MOSTRAR RESULTADO FINAL"],
-    dica: "Leia, calcule, teste, passe o resultado, mostre"
-  }
-];
-
 var estado = {
-  nome: "",
-  fase: 0,
+  nome: '',
   pontos: 0,
+  fase: 0,
+  faseAtual: 0,
   programa: [],
   inicio: null,
   timer: null,
-  faseLiberada: 0
+  jogo: 'algoritmos',
+  perguntas: [],
+  perguntaAtual: 0,
+  respondeuQuiz: false
 };
 
-// ===== SENHA DO PROFESSOR =====
+var fasesCustomCache = [];
+var quizPerguntasCache = [];
+
+// ===== AUTH =====
+async function fazerLogin() {
+  var nome = document.getElementById('loginNome').value.trim();
+  var senha = document.getElementById('loginSenha').value.trim();
+  var erro = document.getElementById('loginErro');
+  if (nome.length < 2) { mostrarErro(erro, 'Nome precisa ter pelo menos 2 letras'); return; }
+  if (!senha) { mostrarErro(erro, 'Digite a senha'); return; }
+
+  var resp = await supabase.from('usuarios').select('*').eq('nome', nome).eq('senha', senha).single();
+  if (resp.error || !resp.data) {
+    mostrarErro(erro, 'Nome ou senha incorretos');
+    return;
+  }
+  estado.nome = resp.data.nome;
+  estado.pontos = resp.data.pontos || 0;
+  estado.faseAtual = resp.data.fase_atual || 0;
+  estado.jogo = resp.data.jogo || 'algoritmos';
+  estado.fase = 0;
+  document.getElementById('playerName').textContent = estado.nome;
+  document.getElementById('jogarPontos').textContent = estado.pontos + ' pts';
+  document.getElementById('loginBox') ? document.getElementById('loginBox').classList.add('hidden') : null;
+  router('jogar');
+  registrarOnline();
+  iniciarTimer();
+  await carregarFases();
+  await carregarQuizPerguntas();
+  carregarFase();
+  checarFaseLiberada();
+  renderRankingMini();
+}
+
+function mostrarErro(el, msg) {
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+
+function entrarJogo() {
+  router('login');
+}
+
+async function salvarProgresso() {
+  if (!estado.nome) return;
+  await supabase.from('ranking').upsert({
+    nome: estado.nome,
+    pontos: estado.pontos,
+    fase: estado.faseAtual + 1,
+    tempo: Math.floor((Date.now() - estado.inicio) / 1000),
+    jogo: estado.jogo
+  }, { onConflict: 'nome' });
+  await supabase.from('usuarios').update({
+    pontos: estado.pontos,
+    fase_atual: estado.faseAtual,
+    jogo: estado.jogo
+  }).eq('nome', estado.nome);
+}
+
+// ===== PROFESSOR AUTH =====
 function getProfSenha() {
   return localStorage.getItem('fabrica_prof_senha') || 'prof';
 }
@@ -114,10 +94,12 @@ function entrarProf() {
     sessionStorage.setItem('fabrica_prof_logado', '1');
     document.getElementById('profLoginBox').classList.add('hidden');
     document.getElementById('profPainel').classList.remove('hidden');
-    gerarQR();
     renderRankingProf();
-    renderControleFases();
     renderJogadores();
+    renderListaAlunos();
+    renderListaFasesCustom();
+    renderListaQuizPerguntas();
+    gerarQR();
   } else {
     erro.classList.remove('hidden');
     input.value = '';
@@ -125,7 +107,7 @@ function entrarProf() {
   }
 }
 
-// ===== NAVIGACAO =====
+// ===== NAVIGATION =====
 function router(view) {
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
   document.querySelectorAll('.bn-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -137,7 +119,12 @@ function router(view) {
     if (profLogado()) {
       document.getElementById('profLoginBox').classList.add('hidden');
       document.getElementById('profPainel').classList.remove('hidden');
-      gerarQR(); renderRankingProf(); renderControleFases(); renderJogadores();
+      renderRankingProf();
+      renderJogadores();
+      renderListaAlunos();
+      renderListaFasesCustom();
+      renderListaQuizPerguntas();
+      gerarQR();
     } else {
       document.getElementById('profLoginBox').classList.remove('hidden');
       document.getElementById('profPainel').classList.add('hidden');
@@ -145,18 +132,43 @@ function router(view) {
       document.getElementById('profSenhaInput').value = '';
     }
   }
-  if (view === 'jogar') { renderRankingMini(); }
+  if (view === 'jogar') {
+    if (!estado.nome) {
+      router('login');
+      return;
+    }
+    renderRankingMini();
+    renderJogar();
+  }
+  if (view === 'login') {
+    document.getElementById('loginNome').value = '';
+    document.getElementById('loginSenha').value = '';
+    document.getElementById('loginErro').classList.add('hidden');
+  }
   location.hash = view;
+}
+
+// ===== PROF TABS =====
+function profTab(tab) {
+  document.querySelectorAll('.prof-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.prof-tab-content').forEach(function(c) { c.classList.remove('active'); });
+  event.target.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'ranking') renderRankingProf();
+  if (tab === 'alunos') renderListaAlunos();
+  if (tab === 'fases') renderListaFasesCustom();
+  if (tab === 'quiz') renderListaQuizPerguntas();
 }
 
 // ===== QR CODE =====
 function gerarQR() {
-  var sala = document.getElementById('salaInput').value || 'SALA-7A';
+  var sala = document.getElementById('salaInput') ? document.getElementById('salaInput').value || 'SALA-7A' : 'SALA-7A';
   var base = location.href.split('#')[0].split('?')[0];
   var link = base + '#jogar';
   var url = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(link);
   document.getElementById('qrImg').src = url;
   document.getElementById('qrLink').textContent = link + '?sala=' + encodeURIComponent(sala);
+  document.getElementById('qrBox').classList.remove('hidden');
 }
 
 function copiarLink() {
@@ -175,123 +187,94 @@ async function getFasesLiberadas() {
   return resp.data.map(function(r) { return r.fase; });
 }
 
-async function renderControleFases() {
-  var c = document.getElementById('controleFases');
-  if (!c) return;
-  var liberadas = await getFasesLiberadas();
-  var html = '';
-  for (var i = 0; i < FASES.length; i++) {
-    var liberada = liberadas.indexOf(i) !== -1;
-    var classe = liberada ? 'ctrl-fase lib' : 'ctrl-fase';
-    var btnHtml = liberada
-      ? '<button class="ctrl-fase-btn fechar" onclick="fecharFase(' + i + ')">Fechar</button>'
-      : '<button class="ctrl-fase-btn lib" onclick="liberarFase(' + i + ')">Liberar</button>';
-    var solucao = FASES[i].solucao.map(function(s, j) { return '<span class="solucao-passo">' + (j+1) + '. ' + s + '</span>'; }).join('');
-    html += '<div class="' + classe + '">' +
-      '<div class="ctrl-fase-topo" onclick="toggleFaseDetalhe(' + i + ')">' +
-      '<div class="ctrl-fase-num">' + (i + 1) + '</div>' +
-      '<div class="ctrl-fase-info"><strong>' + FASES[i].titulo + '</strong>' +
-      (liberada ? 'Liberada' : 'Bloqueada') + '</div>' +
-      '<span class="ctrl-fase-seta" id="setaFase' + i + '">&#9660;</span>' +
-      btnHtml + '</div>' +
-      '<div class="ctrl-fase-detalhe hidden" id="detalheFase' + i + '">' +
-      '<div class="solucao-box"><strong>Resposta correta:</strong>' + solucao + '</div>' +
-      '<div class="dica-box"><strong>Dica:</strong> ' + FASES[i].dica + '</div>' +
-      '</div></div>';
-  }
-  c.innerHTML = html;
-  var badge = document.getElementById('faseAtualProf');
-  if (badge) {
-    badge.textContent = liberadas.length > 0 ? 'Fase ' + (Math.max.apply(null, liberadas) + 1) : 'Nenhuma';
-  }
-}
-
-function toggleFaseDetalhe(idx) {
-  var el = document.getElementById('detalheFase' + idx);
-  var seta = document.getElementById('setaFase' + idx);
-  if (!el) return;
-  el.classList.toggle('hidden');
-  seta.innerHTML = el.classList.contains('hidden') ? '&#9660;' : '&#9650;';
-}
-
-async function liberarFase(idx) {
-  await supabase.from('fases_liberadas').upsert({ fase: idx }, { onConflict: 'fase' });
-  renderControleFases();
-}
-
-async function fecharFase(idx) {
-  await supabase.from('fases_liberadas').delete().eq('fase', idx);
-  renderControleFases();
-}
-
-// ===== JOGAR =====
-function entrarJogo() {
-  var n = document.getElementById('nomeInput').value.trim();
-  if (n.length < 2) { alert('Digite seu nome (minimo 2 letras)'); return; }
-  estado.nome = n;
-  estado.fase = 0;
-  estado.pontos = 0;
-  estado.programa = [];
-  document.getElementById('loginBox').classList.add('hidden');
-  document.getElementById('gameBox').classList.remove('hidden');
-  document.getElementById('playerName').textContent = n;
-  iniciarTimer();
-  carregarFase();
-  registrarOnline();
-}
-
-function iniciarTimer() {
-  estado.inicio = Date.now();
-  clearInterval(estado.timer);
-  estado.timer = setInterval(function() {
-    var s = Math.floor((Date.now() - estado.inicio) / 1000);
-    var m = String(Math.floor(s / 60)).padStart(2, '0');
-    var sec = String(s % 60).padStart(2, '0');
-    document.getElementById('tempo').textContent = m + ':' + sec;
-  }, 500);
-}
-
 async function checarFaseLiberada() {
+  if (!estado.nome) return false;
   var liberadas = await getFasesLiberadas();
-  if (liberadas.indexOf(estado.fase) !== -1) {
-    document.getElementById('faseAguardando').classList.add('hidden');
-    document.getElementById('faseConteudo').classList.remove('hidden');
-    return true;
+  if (estado.jogo === 'algoritmos') {
+    if (liberadas.indexOf(estado.fase) !== -1) {
+      document.getElementById('faseAguardando').classList.add('hidden');
+      document.getElementById('faseConteudo').classList.remove('hidden');
+      document.getElementById('quizConteudo').classList.add('hidden');
+      return true;
+    }
+    document.getElementById('faseAguardando').classList.remove('hidden');
+    document.getElementById('faseConteudo').classList.add('hidden');
+    return false;
+  } else {
+    // quiz: check if fase 0 (quiz starts when fase 0 is liberated)
+    if (liberadas.indexOf(0) !== -1) {
+      document.getElementById('faseAguardando').classList.add('hidden');
+      document.getElementById('faseConteudo').classList.add('hidden');
+      document.getElementById('quizConteudo').classList.remove('hidden');
+      return true;
+    }
+    document.getElementById('faseAguardando').classList.remove('hidden');
+    document.getElementById('quizConteudo').classList.add('hidden');
+    return false;
   }
-  document.getElementById('faseAguardando').classList.remove('hidden');
-  document.getElementById('faseConteudo').classList.add('hidden');
-  return false;
 }
 
+// ===== CARREGAR FASES E QUIZ =====
+async function carregarFases() {
+  var resp = await supabase.from('fases_custom').select('*').order('ordem');
+  fasesCustomCache = (resp.data && resp.data.length > 0) ? resp.data : [];
+}
+
+async function carregarQuizPerguntas() {
+  var resp = await supabase.from('quiz_perguntas').select('*').order('ordem');
+  quizPerguntasCache = resp.data || [];
+}
+
+// ===== GAME: ALGORITMOS =====
 function carregarFase() {
-  var f = FASES[estado.fase];
-  document.getElementById('faseLabel').textContent = 'Fase ' + (estado.fase + 1) + '/' + FASES.length;
+  if (fasesCustomCache.length === 0) {
+    document.getElementById('faseAguardando').classList.remove('hidden');
+    document.getElementById('faseConteudo').classList.add('hidden');
+    return;
+  }
+  if (estado.fase >= fasesCustomCache.length) {
+    clearInterval(estado.timer);
+    document.getElementById('progressBar').style.width = '100%';
+    var tempo = document.getElementById('tempo').textContent;
+    document.getElementById('gameBox') ? null : null;
+    document.getElementById('faseConteudo').innerHTML =
+      '<div class="login-card" style="margin:40px auto">' +
+      '<div class="login-icon">&#127942;</div>' +
+      '<h2>Todas as fases concluidas!</h2>' +
+      '<p><strong>' + estado.nome + '</strong> fez <strong>' + estado.pontos + '</strong> pontos em ' + tempo + '</p>' +
+      '<button class="btn-entrar" style="margin-top:14px" onclick="location.reload()">Jogar de novo</button>' +
+      '</div>';
+    return;
+  }
+  var f = fasesCustomCache[estado.fase];
+  document.getElementById('faseLabel').textContent = 'Fase ' + (estado.fase + 1) + '/' + fasesCustomCache.length;
   document.getElementById('jogarPontos').textContent = estado.pontos + ' pts';
-  document.getElementById('progressBar').style.width = ((estado.fase) / FASES.length * 100) + '%';
+  document.getElementById('progressBar').style.width = ((estado.fase) / fasesCustomCache.length * 100) + '%';
   document.getElementById('faseTitulo').textContent = f.titulo;
-  document.getElementById('faseObjetivo').textContent = f.objetivo;
-  document.getElementById('faseExemplo').innerHTML = f.exemplo;
+  document.getElementById('faseObjetivo').textContent = f.objetivo || '';
+  document.getElementById('faseExemplo').innerHTML = f.exemplo || '';
   document.getElementById('execLog').textContent = '';
+  document.getElementById('execLog').classList.add('hidden');
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'feedback hidden';
   document.getElementById('btnProxima').classList.add('hidden');
   document.getElementById('btnExecutar').disabled = false;
+  document.getElementById('faseConteudo').classList.remove('hidden');
   estado.programa = [];
   renderBlocos();
   renderPrograma();
-  checarFaseLiberada();
 }
 
 function renderBlocos() {
-  var f = FASES[estado.fase];
+  var f = fasesCustomCache[estado.fase];
+  var blocos = Array.isArray(f.blocos) ? f.blocos : JSON.parse(f.blocos);
   var c = document.getElementById('blocosDisponiveis');
   c.innerHTML = '';
-  var embaralhados = f.blocos.slice().sort(function() { return Math.random() - 0.5; });
+  var embaralhados = blocos.slice().sort(function() { return Math.random() - 0.5; });
   embaralhados.forEach(function(txt) {
     var d = document.createElement('div');
     d.className = 'bloco';
     d.textContent = txt;
-    d.setAttribute('data-valor', txt);
     d.onclick = function() { addBloco(txt); };
     c.appendChild(d);
   });
@@ -328,12 +311,14 @@ function limparPrograma() {
   estado.programa = [];
   renderPrograma();
   document.getElementById('execLog').textContent = '';
+  document.getElementById('execLog').classList.add('hidden');
   document.getElementById('feedback').textContent = '';
   document.getElementById('feedback').className = 'feedback hidden';
 }
 
 function executarPrograma() {
-  var f = FASES[estado.fase];
+  var f = fasesCustomCache[estado.fase];
+  var solucao = Array.isArray(f.solucao) ? f.solucao : JSON.parse(f.solucao);
   var log = document.getElementById('execLog');
   var fb = document.getElementById('feedback');
   log.textContent = '';
@@ -354,18 +339,20 @@ function executarPrograma() {
       i++;
       setTimeout(step, 250);
     } else {
-      var ok = estado.programa.length === f.solucao.length &&
-        estado.programa.every(function(v, idx) { return v === f.solucao[idx]; });
+      var ok = estado.programa.length === solucao.length &&
+        estado.programa.every(function(v, idx) { return v === solucao[idx]; });
       if (ok) {
         var pts = 100 + Math.max(0, 50 - Math.floor((Date.now() - estado.inicio) / 2000));
         estado.pontos += pts;
+        estado.faseAtual = estado.fase;
         document.getElementById('jogarPontos').textContent = estado.pontos + ' pts';
         fb.textContent = 'Programa correto! +' + pts + ' pontos';
         fb.className = 'feedback ok';
         document.getElementById('btnProxima').classList.remove('hidden');
-        salvarRanking().then(function() { renderRankingMini(); });
+        document.getElementById('btnPular').classList.add('hidden');
+        salvarProgresso().then(function() { renderRankingMini(); });
       } else {
-        fb.textContent = 'Programa com erro. Ordene os blocos novamente. Dica: ' + f.dica;
+        fb.textContent = 'Programa com erro. Ordene os blocos novamente. Dica: ' + (f.dica || '');
         fb.className = 'feedback err';
         log.textContent += '\nERRO: saida inesperada.';
         document.getElementById('btnExecutar').disabled = false;
@@ -376,19 +363,18 @@ function executarPrograma() {
 }
 
 function proximaFase() {
-  if (estado.fase < FASES.length - 1) {
+  if (estado.fase < fasesCustomCache.length - 1) {
     estado.fase++;
     carregarFase();
   } else {
     clearInterval(estado.timer);
     document.getElementById('progressBar').style.width = '100%';
     var tempo = document.getElementById('tempo').textContent;
-    document.getElementById('gameBox').innerHTML =
+    document.getElementById('faseConteudo').innerHTML =
       '<div class="login-card" style="margin:40px auto">' +
       '<div class="login-icon">&#127942;</div>' +
-      '<h2>Fabrica Concluida!</h2>' +
+      '<h2>Todas as fases concluidas!</h2>' +
       '<p><strong>' + estado.nome + '</strong> fez <strong>' + estado.pontos + '</strong> pontos em ' + tempo + '</p>' +
-      '<p style="color:var(--muted);font-size:13px;margin-top:8px">Voce entendeu: Programa = Algoritmos em sequencia</p>' +
       '<button class="btn-entrar" style="margin-top:14px" onclick="location.reload()">Jogar de novo</button>' +
       '</div>';
   }
@@ -396,40 +382,143 @@ function proximaFase() {
 
 function pularFase() {
   if (!confirm('Pular esta fase sem pontos?')) return;
-  if (estado.fase < FASES.length - 1) {
+  if (estado.fase < fasesCustomCache.length - 1) {
     estado.fase++;
     carregarFase();
-    salvarRanking().then(function() { renderRankingMini(); });
   } else {
     proximaFase();
   }
 }
 
-// ===== RANKING (Supabase) =====
-async function salvarRanking() {
-  var tempo = Math.floor((Date.now() - estado.inicio) / 1000);
-  await supabase.from('ranking').upsert({
-    nome: estado.nome,
-    pontos: estado.pontos,
-    fase: estado.fase + 1,
-    tempo: tempo
-  }, { onConflict: 'nome' });
+// ===== GAME: QUIZ =====
+function carregarPerguntaQuiz() {
+  if (quizPerguntasCache.length === 0) {
+    document.getElementById('faseAguardando').classList.remove('hidden');
+    document.getElementById('quizConteudo').classList.add('hidden');
+    return;
+  }
+  if (estado.perguntaAtual >= quizPerguntasCache.length) {
+    clearInterval(estado.timer);
+    document.getElementById('quizConteudo').innerHTML =
+      '<div class="login-card" style="margin:40px auto">' +
+      '<div class="login-icon">&#127942;</div>' +
+      '<h2>Quiz finalizado!</h2>' +
+      '<p><strong>' + estado.nome + '</strong> fez <strong>' + estado.pontos + '</strong> pontos</p>' +
+      '<button class="btn-entrar" style="margin-top:14px" onclick="location.reload()">Jogar de novo</button>' +
+      '</div>';
+    return;
+  }
+  var p = quizPerguntasCache[estado.perguntaAtual];
+  var alternativas = Array.isArray(p.alternativas) ? p.alternativas : JSON.parse(p.alternativas);
+  document.getElementById('quizPergunta').textContent = 'Pergunta ' + (estado.perguntaAtual + 1) + '/' + quizPerguntasCache.length + ': ' + p.pergunta;
+  document.getElementById('faseLabel').textContent = 'Quiz ' + (estado.perguntaAtual + 1) + '/' + quizPerguntasCache.length;
+  document.getElementById('progressBar').style.width = ((estado.perguntaAtual) / quizPerguntasCache.length * 100) + '%';
+  document.getElementById('jogarPontos').textContent = estado.pontos + ' pts';
+
+  var c = document.getElementById('quizAlternativas');
+  c.innerHTML = '';
+  alternativas.forEach(function(alt, idx) {
+    var btn = document.createElement('button');
+    btn.className = 'quiz-alt';
+    btn.textContent = (idx + 1) + ') ' + alt;
+    btn.onclick = function() { responderQuiz(idx, p.resposta_correta); };
+    c.appendChild(btn);
+  });
+
+  document.getElementById('quizFeedback').textContent = '';
+  document.getElementById('quizFeedback').className = 'feedback hidden';
+  document.getElementById('btnQuizProxima').classList.add('hidden');
+  document.getElementById('btnQuizPular').classList.remove('hidden');
+  estado.respondeuQuiz = false;
+  document.getElementById('quizConteudo').classList.remove('hidden');
 }
 
-async function marcarSaida() {
+function responderQuiz(idx, correta) {
+  if (estado.respondeuQuiz) return;
+  estado.respondeuQuiz = true;
+  var btns = document.querySelectorAll('#quizAlternativas .quiz-alt');
+  btns.forEach(function(b, i) {
+    b.classList.add('disabled');
+    if (i === correta) b.classList.add('correct');
+    if (i === idx && i !== correta) b.classList.add('wrong');
+  });
+  var fb = document.getElementById('quizFeedback');
+  fb.classList.remove('hidden');
+  if (idx === correta) {
+    var pts = 100;
+    estado.pontos += pts;
+    fb.textContent = 'Resposta correta! +' + pts + ' pontos';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Resposta incorreta!';
+    fb.className = 'feedback err';
+  }
+  document.getElementById('jogarPontos').textContent = estado.pontos + ' pts';
+  document.getElementById('btnQuizProxima').classList.remove('hidden');
+  document.getElementById('btnQuizPular').classList.add('hidden');
+  salvarProgresso().then(function() { renderRankingMini(); });
+}
+
+function proximaPergunta() {
+  if (estado.perguntaAtual < quizPerguntasCache.length - 1) {
+    estado.perguntaAtual++;
+    carregarPerguntaQuiz();
+  } else {
+    clearInterval(estado.timer);
+    document.getElementById('progressBar').style.width = '100%';
+  }
+}
+
+function pularPergunta() {
+  if (!confirm('Pular esta pergunta sem pontos?')) return;
+  if (estado.perguntaAtual < quizPerguntasCache.length - 1) {
+    estado.perguntaAtual++;
+    carregarPerguntaQuiz();
+  } else {
+    proximaPergunta();
+  }
+}
+
+// ===== JOGO: mudar modo =====
+async function mudarJogo() {
   if (!estado.nome) return;
-  // busca avisos atuais
-  var resp = await supabase.from('ranking').select('avisos,pontos').eq('nome', estado.nome).single();
-  if (!resp.data) return;
-  var avisos = (resp.data.avisos || 0) + 1;
-  // penalidade: 5, 10, 15, 20... (5 x numero do aviso)
-  var penalidade = avisos * 5;
-  var novosPontos = Math.max(0, resp.data.pontos - penalidade);
-  await supabase.from('ranking').update({ avisos: avisos, pontos: novosPontos }).eq('nome', estado.nome);
-  estado.pontos = novosPontos;
-  document.getElementById('jogarPontos').textContent = novosPontos + ' pts';
+  var novoJogo = document.getElementById('jogoSelect').value;
+  estado.jogo = novoJogo;
+  await supabase.from('usuarios').update({ jogo: novoJogo }).eq('nome', estado.nome);
+  await supabase.from('ranking').update({ jogo: novoJogo }).eq('nome', estado.nome);
+  renderJogar();
 }
 
+function renderJogar() {
+  var badge = document.getElementById('jogarModo');
+  badge.textContent = estado.jogo === 'quiz' ? 'Quiz' : 'Algoritmos';
+  document.getElementById('faseLabel').textContent = estado.jogo === 'quiz'
+    ? 'Quiz 0/' + quizPerguntasCache.length
+    : 'Fase ' + (estado.fase + 1) + '/' + fasesCustomCache.length;
+
+  if (estado.jogo === 'quiz') {
+    document.getElementById('faseConteudo').classList.add('hidden');
+    document.getElementById('quizConteudo').classList.remove('hidden');
+    carregarPerguntaQuiz();
+  } else {
+    document.getElementById('quizConteudo').classList.add('hidden');
+    carregarFase();
+  }
+}
+
+// ===== TIMER =====
+function iniciarTimer() {
+  estado.inicio = Date.now();
+  clearInterval(estado.timer);
+  estado.timer = setInterval(function() {
+    var s = Math.floor((Date.now() - estado.inicio) / 1000);
+    var m = String(Math.floor(s / 60)).padStart(2, '0');
+    var sec = String(s % 60).padStart(2, '0');
+    document.getElementById('tempo').textContent = m + ':' + sec;
+  }, 500);
+}
+
+// ===== RANKING (Supabase) =====
 async function getRanking() {
   var resp = await supabase
     .from('ranking')
@@ -561,7 +650,191 @@ window.addEventListener('blur', function() {
   marcarSaida();
 });
 
-// ===== REALTIME: atualiza ranking, fases e jogadores em tempo real =====
+async function marcarSaida() {
+  if (!estado.nome) return;
+  var resp = await supabase.from('ranking').select('avisos,pontos').eq('nome', estado.nome).single();
+  if (!resp.data) return;
+  var avisos = (resp.data.avisos || 0) + 1;
+  var penalidade = avisos * 5;
+  var novosPontos = Math.max(0, resp.data.pontos - penalidade);
+  await supabase.from('ranking').update({ avisos: avisos, pontos: novosPontos }).eq('nome', estado.nome);
+  await supabase.from('usuarios').update({ pontos: novosPontos }).eq('nome', estado.nome);
+  estado.pontos = novosPontos;
+  document.getElementById('jogarPontos').textContent = novosPontos + ' pts';
+}
+
+// ===== PROFESSOR: CADASTRO DE ALUNOS =====
+async function cadastrarAluno() {
+  var nome = document.getElementById('novoAlunoNome').value.trim();
+  var senha = document.getElementById('novoAlunoSenha').value.trim();
+  var msg = document.getElementById('cadastroMsg');
+  if (nome.length < 2) { mostrarErro(msg, 'Nome precisa ter pelo menos 2 letras'); return; }
+  if (!senha) { mostrarErro(msg, 'Digite uma senha'); return; }
+
+  var resp = await supabase.from('usuarios').insert({ nome: nome, senha: senha });
+  if (resp.error) {
+    mostrarErro(msg, 'Erro: ' + resp.error.message);
+    return;
+  }
+  mostrarErro(msg, '');
+  msg.className = '';
+  msg.style.color = 'var(--green)';
+  msg.textContent = 'Aluno "' + nome + '" cadastrado!';
+  document.getElementById('novoAlunoNome').value = '';
+  renderListaAlunos();
+  setTimeout(function() { msg.textContent = ''; }, 3000);
+}
+
+async function renderListaAlunos() {
+  var c = document.getElementById('listaAlunos');
+  if (!c) return;
+  var resp = await supabase.from('usuarios').select('*').order('nome');
+  var lista = resp.data || [];
+  if (lista.length === 0) {
+    c.innerHTML = '<p class="hint">Nenhum aluno cadastrado</p>';
+    return;
+  }
+  c.innerHTML = lista.map(function(a) {
+    return '<div class="aluno-row">' +
+      '<span class="aluno-nome">' + a.nome + '</span>' +
+      '<span class="aluno-senha">' + a.senha + '</span>' +
+      '<span class="aluno-pontos">' + (a.pontos || 0) + ' pts</span>' +
+      '<div class="aluno-btns">' +
+      '<button class="aluno-btn aluno-btn-reset" onclick="resetarSenha(\'' + a.nome + '\')">Resetar senha</button>' +
+      '<button class="aluno-btn aluno-btn-del" onclick="deletarAluno(\'' + a.nome + '\')">X</button>' +
+      '</div></div>';
+  }).join('');
+}
+
+async function resetarSenha(nome) {
+  var novaSenha = prompt('Nova senha para "' + nome + '":');
+  if (!novaSenha) return;
+  await supabase.from('usuarios').update({ senha: novaSenha }).eq('nome', nome);
+  renderListaAlunos();
+}
+
+async function deletarAluno(nome) {
+  if (!confirm('Deletar aluno "' + nome + '"?')) return;
+  await supabase.from('usuarios').delete().eq('nome', nome);
+  renderListaAlunos();
+}
+
+// ===== PROFESSOR: FASES CUSTOMIZADAS =====
+async function salvarFaseCustom() {
+  var titulo = document.getElementById('faseTitulo').value.trim();
+  var objetivo = document.getElementById('faseObjetivo').value.trim();
+  var exemplo = document.getElementById('faseExemplo').value.trim();
+  var dica = document.getElementById('faseDica').value.trim();
+  var blocosRaw = document.getElementById('faseBlocos').value.trim();
+  var solucaoRaw = document.getElementById('faseSolucao').value.trim();
+  if (!titulo || !blocosRaw || !solucaoRaw) {
+    alert('Preencha titulo, blocos e solucao');
+    return;
+  }
+  var blocos = blocosRaw.split('\n').map(function(s) { return s.trim(); }).filter(Boolean);
+  var solucao = solucaoRaw.split('\n').map(function(s) { return s.trim(); }).filter(Boolean);
+  var maxOrdem = fasesCustomCache.length;
+  await supabase.from('fases_custom').insert({
+    titulo: titulo,
+    objetivo: objetivo,
+    exemplo: exemplo,
+    blocos: blocos,
+    solucao: solucao,
+    dica: dica,
+    ordem: maxOrdem
+  });
+  document.getElementById('faseTitulo').value = '';
+  document.getElementById('faseObjetivo').value = '';
+  document.getElementById('faseExemplo').value = '';
+  document.getElementById('faseDica').value = '';
+  document.getElementById('faseBlocos').value = '';
+  document.getElementById('faseSolucao').value = '';
+  await carregarFases();
+  renderListaFasesCustom();
+}
+
+async function renderListaFasesCustom() {
+  var c = document.getElementById('listaFasesCustom');
+  if (!c) return;
+  await carregarFases();
+  if (fasesCustomCache.length === 0) {
+    c.innerHTML = '<p class="hint">Nenhuma fase customizada</p>';
+    return;
+  }
+  c.innerHTML = fasesCustomCache.map(function(f) {
+    return '<div class="fase-row">' +
+      '<span class="fase-row-titulo">' + f.titulo + '</span>' +
+      '<button class="fase-row-btn" onclick="deletarFaseCustom(' + f.id + ')">X</button>' +
+      '</div>';
+  }).join('');
+}
+
+async function deletarFaseCustom(id) {
+  if (!confirm('Deletar esta fase?')) return;
+  await supabase.from('fases_custom').delete().eq('id', id);
+  await carregarFases();
+  renderListaFasesCustom();
+}
+
+// ===== PROFESSOR: QUIZ =====
+async function salvarPerguntaQuiz() {
+  var pergunta = document.getElementById('quizPerguntaInput').value.trim();
+  var alternativasRaw = document.getElementById('quizAlternativasInput').value.trim();
+  var resposta = parseInt(document.getElementById('quizRespostaInput').value) - 1;
+  if (!pergunta || !alternativasRaw) {
+    alert('Preencha a pergunta e as alternativas');
+    return;
+  }
+  var alternativas = alternativasRaw.split('\n').map(function(s) { return s.trim(); }).filter(Boolean);
+  if (resposta < 0 || resposta >= alternativas.length) {
+    alert('Resposta correta invalida. Use o numero da alternativa (1, 2, 3...)');
+    return;
+  }
+  var maxOrdem = quizPerguntasCache.length;
+  await supabase.from('quiz_perguntas').insert({
+    pergunta: pergunta,
+    alternativas: alternativas,
+    resposta_correta: resposta,
+    ordem: maxOrdem
+  });
+  document.getElementById('quizPerguntaInput').value = '';
+  document.getElementById('quizAlternativasInput').value = '';
+  document.getElementById('quizRespostaInput').value = '1';
+  await carregarQuizPerguntas();
+  renderListaQuizPerguntas();
+}
+
+async function renderListaQuizPerguntas() {
+  var c = document.getElementById('listaQuizPerguntas');
+  if (!c) return;
+  await carregarQuizPerguntas();
+  if (quizPerguntasCache.length === 0) {
+    c.innerHTML = '<p class="hint">Nenhuma pergunta criada</p>';
+    return;
+  }
+  c.innerHTML = quizPerguntasCache.map(function(p) {
+    var alts = Array.isArray(p.alternativas) ? p.alternativas : JSON.parse(p.alternativas);
+    var altHtml = alts.map(function(a, i) {
+      var cls = i === p.resposta_correta ? 'quiz-row-alt correta' : 'quiz-row-alt';
+      return '<div class="' + cls + '">' + (i + 1) + ') ' + a + '</div>';
+    }).join('');
+    return '<div class="quiz-row">' +
+      '<div class="quiz-row-pergunta">' + p.pergunta + '</div>' +
+      altHtml +
+      '<div class="quiz-row-btns">' +
+      '<button class="fase-row-btn" onclick="deletarPerguntaQuiz(' + p.id + ')">X</button>' +
+      '</div></div>';
+  }).join('');
+}
+
+async function deletarPerguntaQuiz(id) {
+  if (!confirm('Deletar esta pergunta?')) return;
+  await supabase.from('quiz_perguntas').delete().eq('id', id);
+  await carregarQuizPerguntas();
+  renderListaQuizPerguntas();
+}
+
+// ===== REALTIME =====
 supabase
   .channel('all-changes')
   .on('postgres_changes', { event: '*', schema: 'public', table: 'ranking' }, function() {
@@ -576,9 +849,8 @@ supabase
   })
   .subscribe();
 
-// ===== POLLING: checa se fase foi liberada a cada 2s =====
 setInterval(function() {
-  if (estado.nome && document.getElementById('faseConteudo')) {
+  if (estado.nome) {
     checarFaseLiberada();
   }
 }, 2000);
@@ -586,7 +858,6 @@ setInterval(function() {
 // ===== INIT =====
 window.addEventListener('load', function() {
   var h = location.hash.replace('#', '');
-  if (h === 'jogar' || h === 'professor') router(h);
+  if (h === 'jogar' || h === 'professor' || h === 'login') router(h);
   else router('home');
-  gerarQR();
 });
