@@ -267,14 +267,31 @@ async function renderSalaDetalhe() {
   var link = base + '#jogar';
   var url = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(link);
   document.getElementById('salaQrImg').src = url;
-  document.getElementById('salaQrLink').textContent = link + '?sala=' + encodeURIComponent(s.nome);
+
+  // Mostrar aba Quiz apenas para salas de quiz
+  var tabs = document.querySelector('#view-sala .prof-tabs');
+  var existingQuizTab = tabs.querySelector('[onclick*="quiz"]');
+  if (s.jogo === 'quiz' && !existingQuizTab) {
+    var quizBtn = document.createElement('button');
+    quizBtn.className = 'prof-tab';
+    quizBtn.setAttribute('onclick', "salaTab('quiz')");
+    quizBtn.textContent = 'Quiz';
+    tabs.appendChild(quizBtn);
+  } else if (s.jogo !== 'quiz' && existingQuizTab) {
+    existingQuizTab.remove();
+  }
+
+  // Resetar pra tab ranking
+  document.querySelectorAll('#view-sala .prof-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('#view-sala .prof-tab-content').forEach(function(c) { c.classList.remove('active'); });
+  tabs.querySelector('.prof-tab').classList.add('active');
+  document.getElementById('stab-ranking').classList.add('active');
 
   renderAlunosSala();
   renderRankingSala();
-  renderListaAlunos();
   renderJogadores();
   renderListaFasesCustom();
-  renderListaQuizPerguntas();
+  if (s.jogo === 'quiz') renderListaQuizPerguntas();
 }
 
 async function toggleSala() {
@@ -332,7 +349,7 @@ function salaTab(tab) {
   event.target.classList.add('active');
   document.getElementById('stab-' + tab).classList.add('active');
   if (tab === 'ranking') renderRankingSala();
-  if (tab === 'alunos') { renderListaAlunos(); renderJogadores(); }
+  if (tab === 'alunos') { renderAlunosSala(); renderJogadores(); }
   if (tab === 'fases') renderListaFasesCustom();
   if (tab === 'quiz') renderListaQuizPerguntas();
 }

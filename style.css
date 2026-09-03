@@ -218,23 +218,20 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .modal-btns .btn-sm{flex:1;padding:14px;font-size:14px}
 
 /* ===== SALA DETALHE ===== */
-.page-sala{padding:16px 16px 80px;max-width:960px;margin:0 auto}
-.sala-top-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow)}
-.sala-top-bar h2{flex:1;font-size:20px;font-weight:900}
-.sala-status-badge{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.page-sala{padding:16px 16px 80px;max-width:800px;margin:0 auto}
+.sala-top-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;box-shadow:var(--shadow)}
+.sala-top-bar h2{flex:1;font-size:18px;font-weight:900}
+.sala-status-badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
 .sala-status-badge.aberta{background:#d4edda;color:#155724}
 .sala-status-badge.fechada{background:#f8d7da;color:#721c24}
-.sala-grid{display:grid;grid-template-columns:280px 1fr;gap:16px;margin-bottom:16px}
-.sala-col-esq{display:flex;flex-direction:column;gap:12px}
-.sala-col-dir{display:flex;flex-direction:column;gap:12px}
-.sala-qr-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow)}
-.sala-qr-box img{width:180px;height:180px;border-radius:12px;border:2px solid var(--border)}
-.sala-qr-box .qr-link{font-size:10px;color:var(--muted);word-break:break-all;margin:8px 0;font-family:'Fira Code',monospace}
-.sala-actions{display:flex;flex-direction:column;gap:8px}
-.sala-actions .btn-sm{width:100%;padding:12px;text-align:center;font-size:13px}
-.sala-alunos-box,.sala-ranking-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
-.sala-alunos-box h3,.sala-ranking-box h3{font-size:14px;margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
-.sala-alunos-lista{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto}
+.sala-actions-bar{display:flex;gap:8px;margin-bottom:16px}
+.sala-actions-bar .btn-sm{flex:1;text-align:center;padding:12px}
+.sala-qr-row{display:grid;grid-template-columns:200px 1fr;gap:16px}
+.sala-qr-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.sala-qr-box img{width:160px;height:160px;border-radius:10px;border:2px solid var(--border)}
+.sala-ranking-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.sala-ranking-box h3{font-size:14px;margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
+.sala-alunos-lista{display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto}
 .sala-aluno-item{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);border-radius:10px;font-size:13px;transition:background .15s}
 .sala-aluno-item:hover{background:#f0ede8}
 .sala-aluno-nome{flex:1;font-weight:700}

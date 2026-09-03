@@ -219,69 +219,52 @@
   <!-- DETALHE DA SALA -->
   <div id="view-sala" class="page page-sala">
     <div class="sala-top-bar">
-      <button class="btn-sm" onclick="voltarHub()">&larr; Voltar</button>
+      <button class="btn-sm" onclick="voltarHub()">&larr;</button>
       <h2 id="salaNomeTopo"></h2>
       <span id="salaStatusBadge" class="sala-status-badge"></span>
     </div>
-    <div class="sala-grid">
-      <div class="sala-col-esq">
-        <div class="sala-qr-box">
-          <img id="salaQrImg" src="" alt="QR">
-          <p id="salaQrLink" class="qr-link"></p>
-          <button class="btn-sm" onclick="copiarLinkSala()">Copiar link</button>
-        </div>
-        <div class="sala-actions">
-          <button id="btnFecharAbrirSala" class="btn-sm btn-danger" onclick="toggleSala()"></button>
-          <button class="btn-sm btn-accent" onclick="liberarFasesSala()">Liberar fases</button>
-          <button class="btn-sm btn-danger" onclick="deletarSalaAtual()">Deletar sala</button>
-        </div>
-      </div>
-      <div class="sala-col-dir">
-        <div class="sala-alunos-box">
-          <h3>Alunos na sala</h3>
-          <div id="salaListaAlunos" class="sala-alunos-lista"></div>
-        </div>
-        <div class="sala-ranking-box">
-          <h3>Ranking</h3>
-          <div id="salaRanking" class="ranking-prof"></div>
-        </div>
-      </div>
+
+    <div class="sala-actions-bar">
+      <button id="btnFecharAbrirSala" class="btn-sm" onclick="toggleSala()"></button>
+      <button class="btn-sm btn-accent" onclick="liberarFasesSala()">Liberar fases</button>
+      <button class="btn-sm btn-danger" onclick="deletarSalaAtual()">Deletar sala</button>
     </div>
 
-    <!-- Tabs dentro da sala -->
-    <div class="prof-tabs" style="margin-top:12px">
+    <!-- Tabs -->
+    <div class="prof-tabs">
       <button class="prof-tab active" onclick="salaTab('ranking')">Ranking</button>
       <button class="prof-tab" onclick="salaTab('alunos')">Alunos</button>
       <button class="prof-tab" onclick="salaTab('fases')">Fases</button>
-      <button class="prof-tab" onclick="salaTab('quiz')">Quiz</button>
     </div>
 
+    <!-- Tab: Ranking -->
     <div id="stab-ranking" class="prof-tab-content active">
-      <div class="prof-card ranking-card">
-        <h2>Ranking ao vivo</h2>
-        <div id="salaRankingTab" class="ranking-prof"></div>
-        <button class="btn-sm btn-danger" style="margin-top:10px" onclick="limparRanking()">Zerar ranking</button>
+      <div class="sala-qr-row">
+        <div class="sala-qr-box">
+          <img id="salaQrImg" src="" alt="QR">
+          <button class="btn-sm" onclick="copiarLinkSala()">Copiar link</button>
+        </div>
+        <div class="sala-ranking-box">
+          <h3>Ranking ao vivo</h3>
+          <div id="salaRankingTab" class="ranking-prof"></div>
+          <button class="btn-sm btn-danger" style="margin-top:10px" onclick="limparRanking()">Zerar ranking</button>
+        </div>
       </div>
     </div>
+
+    <!-- Tab: Alunos -->
     <div id="stab-alunos" class="prof-tab-content">
       <div class="prof-card">
-        <h3>Cadastrar aluno</h3>
-        <div class="prof-form-row">
-          <input id="novoAlunoNome" type="text" placeholder="Nome do aluno" maxlength="15">
-          <input id="novoAlunoSenha" type="text" placeholder="Senha" value="123">
-          <button class="btn-sm" onclick="cadastrarAluno()">Cadastrar</button>
-        </div>
-        <p id="cadastroMsg" class="login-erro hidden"></p>
-      </div>
-      <div class="prof-card">
-        <h3>Alunos cadastrados</h3>
-        <div id="listaAlunos" class="lista-alunos"></div>
+        <h3>Alunos na sala</h3>
+        <div id="salaListaAlunos" class="sala-alunos-lista"></div>
       </div>
       <div class="prof-card">
         <h4>Jogadores conectados</h4>
         <div id="listaJogadores" class="lista-jogadores"></div>
       </div>
     </div>
+
+    <!-- Tab: Fases -->
     <div id="stab-fases" class="prof-tab-content">
       <div class="prof-card">
         <h3>Criar fase customizada</h3>
@@ -302,6 +285,8 @@
         <div id="listaFasesCustom" class="lista-fases"></div>
       </div>
     </div>
+
+    <!-- Tab: Quiz (apenas para salas de quiz) -->
     <div id="stab-quiz" class="prof-tab-content">
       <div class="prof-card">
         <h3>Criar pergunta do quiz</h3>
@@ -335,6 +320,6 @@
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js?v=3"></script>
+<script src="script.js?v=5"></script>
 </body>
 </html>
