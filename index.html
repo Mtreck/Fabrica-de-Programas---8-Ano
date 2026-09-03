@@ -6,7 +6,7 @@
 <title>Criando Algoritmos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 
@@ -156,7 +156,7 @@
       <input id="profSenhaInput" type="password" placeholder="Senha" autocomplete="off">
       <p id="profSenhaErro" class="prof-senha-erro hidden">Nome ou senha incorretos</p>
       <button class="btn-entrar" onclick="entrarProf()">Entrar</button>
-      <p class="prof-cadastro-link">Nao tem conta? <a onclick="router('prof-cadastro')">Cadastre-se</a></p>
+      <p class="prof-cadastro-link">Nao tem conta? <a onclick="document.getElementById('profLoginBox').classList.add('hidden');document.getElementById('profCadastroBox').classList.remove('hidden')">Cadastre-se</a></p>
     </div>
   </div>
 
@@ -171,7 +171,7 @@
       <input id="profCadConfirma" type="password" placeholder="Confirme a senha" autocomplete="off">
       <p id="profCadErro" class="prof-senha-erro hidden"></p>
       <button class="btn-entrar" onclick="cadastrarProf()">Cadastrar</button>
-      <p class="prof-cadastro-link">Ja tem conta? <a onclick="router('professor')">Voltar ao login</a></p>
+      <p class="prof-cadastro-link">Ja tem conta? <a onclick="document.getElementById('profCadastroBox').classList.add('hidden');document.getElementById('profLoginBox').classList.remove('hidden')">Voltar ao login</a></p>
     </div>
   </div>
 
@@ -293,6 +293,6 @@
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
+<script src="script.js?v=3"></script>
 </body>
 </html>

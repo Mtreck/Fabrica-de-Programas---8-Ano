@@ -146,21 +146,12 @@ function sairProf() {
 function router(view) {
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
   document.querySelectorAll('.bn-btn').forEach(function(b) { b.classList.remove('active'); });
-  var viewId = view === 'prof-cadastro' ? 'professor' : view;
-  var el = document.getElementById('view-' + viewId);
+  var el = document.getElementById('view-' + view);
   if (el) el.classList.add('active');
-  var nav = document.getElementById('nav-' + viewId);
+  var nav = document.getElementById('nav-' + view);
   if (nav) nav.classList.add('active');
-  if (view === 'professor' || view === 'prof-cadastro') {
-    if (view === 'prof-cadastro') {
-      document.getElementById('profLoginBox').classList.add('hidden');
-      document.getElementById('profCadastroBox').classList.remove('hidden');
-      document.getElementById('profPainel').classList.add('hidden');
-      document.getElementById('profCadErro').classList.add('hidden');
-      document.getElementById('profCadNome').value = '';
-      document.getElementById('profCadSenha').value = '';
-      document.getElementById('profCadConfirma').value = '';
-    } else if (profLogado()) {
+  if (view === 'professor') {
+    if (profLogado()) {
       document.getElementById('profLoginBox').classList.add('hidden');
       document.getElementById('profCadastroBox').classList.add('hidden');
       document.getElementById('profPainel').classList.remove('hidden');
@@ -905,6 +896,6 @@ setInterval(function() {
 // ===== INIT =====
 window.addEventListener('load', function() {
   var h = location.hash.replace('#', '');
-  if (h === 'jogar' || h === 'professor' || h === 'prof-cadastro' || h === 'login') router(h);
+  if (h === 'jogar' || h === 'professor' || h === 'login') router(h);
   else router('home');
 });
