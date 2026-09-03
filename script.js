@@ -76,35 +76,70 @@ async function salvarProgresso() {
 }
 
 // ===== PROFESSOR AUTH =====
-function getProfSenha() {
-  return localStorage.getItem('fabrica_prof_senha') || 'prof';
-}
-function setProfSenha(s) {
-  localStorage.setItem('fabrica_prof_senha', s);
-}
 function profLogado() {
-  return sessionStorage.getItem('fabrica_prof_logado') === '1';
+  return sessionStorage.getItem('fabrica_prof_nome') || '';
 }
 
-function entrarProf() {
-  var input = document.getElementById('profSenhaInput');
+async function entrarProf() {
+  var nome = document.getElementById('profNomeInput').value.trim();
+  var senha = document.getElementById('profSenhaInput').value.trim();
   var erro = document.getElementById('profSenhaErro');
-  var senha = input.value.trim();
-  if (senha === getProfSenha()) {
-    sessionStorage.setItem('fabrica_prof_logado', '1');
-    document.getElementById('profLoginBox').classList.add('hidden');
-    document.getElementById('profPainel').classList.remove('hidden');
-    renderRankingProf();
-    renderJogadores();
-    renderListaAlunos();
-    renderListaFasesCustom();
-    renderListaQuizPerguntas();
-    gerarQR();
-  } else {
-    erro.classList.remove('hidden');
-    input.value = '';
-    input.focus();
+  if (!nome) { mostrarErro(erro, 'Digite seu nome'); return; }
+  if (!senha) { mostrarErro(erro, 'Digite sua senha'); return; }
+
+  var resp = await supabase.from('professores').select('*').eq('nome', nome).eq('senha', senha).single();
+  if (resp.error || !resp.data) {
+    mostrarErro(erro, 'Nome ou senha incorretos');
+    document.getElementById('profSenhaInput').value = '';
+    document.getElementById('profSenhaInput').focus();
+    return;
   }
+  sessionStorage.setItem('fabrica_prof_nome', nome);
+  document.getElementById('profLoginBox').classList.add('hidden');
+  document.getElementById('profCadastroBox').classList.add('hidden');
+  document.getElementById('profPainel').classList.remove('hidden');
+  renderRankingProf();
+  renderJogadores();
+  renderListaAlunos();
+  renderListaFasesCustom();
+  renderListaQuizPerguntas();
+  gerarQR();
+}
+
+async function cadastrarProf() {
+  var nome = document.getElementById('profCadNome').value.trim();
+  var senha = document.getElementById('profCadSenha').value.trim();
+  var confirma = document.getElementById('profCadConfirma').value.trim();
+  var erro = document.getElementById('profCadErro');
+  if (!nome || nome.length < 2) { mostrarErro(erro, 'Nome precisa ter pelo menos 2 letras'); return; }
+  if (!senha || senha.length < 3) { mostrarErro(erro, 'Senha precisa ter pelo menos 3 caracteres'); return; }
+  if (senha !== confirma) { mostrarErro(erro, 'As senhas nao conferem'); return; }
+
+  var resp = await supabase.from('professores').insert({ nome: nome, senha: senha });
+  if (resp.error) {
+    mostrarErro(erro, 'Erro: ' + resp.error.message);
+    return;
+  }
+  sessionStorage.setItem('fabrica_prof_nome', nome);
+  document.getElementById('profLoginBox').classList.add('hidden');
+  document.getElementById('profCadastroBox').classList.add('hidden');
+  document.getElementById('profPainel').classList.remove('hidden');
+  renderRankingProf();
+  renderJogadores();
+  renderListaAlunos();
+  renderListaFasesCustom();
+  renderListaQuizPerguntas();
+  gerarQR();
+}
+
+function sairProf() {
+  sessionStorage.removeItem('fabrica_prof_nome');
+  document.getElementById('profPainel').classList.add('hidden');
+  document.getElementById('profLoginBox').classList.remove('hidden');
+  document.getElementById('profCadastroBox').classList.add('hidden');
+  document.getElementById('profNomeInput').value = '';
+  document.getElementById('profSenhaInput').value = '';
+  document.getElementById('profSenhaErro').classList.add('hidden');
 }
 
 // ===== NAVIGATION =====
@@ -118,6 +153,7 @@ function router(view) {
   if (view === 'professor') {
     if (profLogado()) {
       document.getElementById('profLoginBox').classList.add('hidden');
+      document.getElementById('profCadastroBox').classList.add('hidden');
       document.getElementById('profPainel').classList.remove('hidden');
       renderRankingProf();
       renderJogadores();
@@ -127,10 +163,21 @@ function router(view) {
       gerarQR();
     } else {
       document.getElementById('profLoginBox').classList.remove('hidden');
+      document.getElementById('profCadastroBox').classList.add('hidden');
       document.getElementById('profPainel').classList.add('hidden');
       document.getElementById('profSenhaErro').classList.add('hidden');
+      document.getElementById('profNomeInput').value = '';
       document.getElementById('profSenhaInput').value = '';
     }
+  }
+  if (view === 'prof-cadastro') {
+    document.getElementById('profLoginBox').classList.add('hidden');
+    document.getElementById('profCadastroBox').classList.remove('hidden');
+    document.getElementById('profPainel').classList.add('hidden');
+    document.getElementById('profCadErro').classList.add('hidden');
+    document.getElementById('profCadNome').value = '';
+    document.getElementById('profCadSenha').value = '';
+    document.getElementById('profCadConfirma').value = '';
   }
   if (view === 'jogar') {
     if (!estado.nome) {

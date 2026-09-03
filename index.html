@@ -151,17 +151,37 @@
     <div class="login-card">
       <div class="login-icon">&#9881;</div>
       <h2>Painel do Professor</h2>
-      <p class="login-sub">Digite a senha de acesso</p>
+      <p class="login-sub">Entre com seu nome e senha</p>
+      <input id="profNomeInput" type="text" placeholder="Seu nome" maxlength="20" autocomplete="off">
       <input id="profSenhaInput" type="password" placeholder="Senha" autocomplete="off">
-      <p id="profSenhaErro" class="prof-senha-erro hidden">Senha incorreta</p>
+      <p id="profSenhaErro" class="prof-senha-erro hidden">Nome ou senha incorretos</p>
       <button class="btn-entrar" onclick="entrarProf()">Entrar</button>
+      <p class="prof-cadastro-link">Nao tem conta? <a href="#" onclick="router('prof-cadastro');return false">Cadastre-se</a></p>
+    </div>
+  </div>
+
+  <!-- CADASTRO PROFESSOR -->
+  <div id="profCadastroBox" class="prof-login-box hidden">
+    <div class="login-card">
+      <div class="login-icon">&#9881;</div>
+      <h2>Cadastro de Professor</h2>
+      <p class="login-sub">Crie sua conta</p>
+      <input id="profCadNome" type="text" placeholder="Seu nome" maxlength="20" autocomplete="off">
+      <input id="profCadSenha" type="password" placeholder="Crie uma senha" autocomplete="off">
+      <input id="profCadConfirma" type="password" placeholder="Confirme a senha" autocomplete="off">
+      <p id="profCadErro" class="prof-senha-erro hidden"></p>
+      <button class="btn-entrar" onclick="cadastrarProf()">Cadastrar</button>
+      <p class="prof-cadastro-link">Ja tem conta? <a href="#" onclick="router('professor');return false">Voltar ao login</a></p>
     </div>
   </div>
 
   <!-- PAINEL PROFESSOR -->
   <div id="profPainel" class="hidden">
     <div class="prof-header">
-      <h2>Painel do Professor</h2>
+      <div class="prof-header-top">
+        <h2>Painel do Professor</h2>
+        <button class="btn-sm btn-danger" onclick="sairProf()">Sair</button>
+      </div>
       <div class="prof-header-row">
         <div class="prof-sala-info">
           <input id="salaInput" value="SALA-7A" type="text">

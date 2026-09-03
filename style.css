@@ -174,8 +174,12 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 /* ===== PROFESSOR PANEL ===== */
 .prof-login-box{min-height:60dvh;display:flex;align-items:center;justify-content:center}
 .prof-senha-erro{color:var(--red);font-size:13px;margin:6px 0 0}
+.prof-cadastro-link{font-size:13px;color:var(--muted);margin-top:12px}
+.prof-cadastro-link a{color:var(--accent);text-decoration:none;font-weight:700}
+.prof-cadastro-link a:hover{text-decoration:underline}
 .prof-header{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
-.prof-header h2{font-size:17px;margin-bottom:8px}
+.prof-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.prof-header-top h2{font-size:17px;margin-bottom:0}
 .prof-header-row{display:flex;gap:8px;align-items:center}
 .prof-sala-info{display:flex;gap:6px;flex:1}
 .prof-sala-info input{flex:1;padding:8px 10px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;outline:none}
