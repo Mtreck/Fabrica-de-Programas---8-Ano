@@ -175,7 +175,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .prof-login-box{min-height:60dvh;display:flex;align-items:center;justify-content:center}
 .prof-senha-erro{color:var(--red);font-size:13px;margin:6px 0 0}
 .prof-cadastro-link{font-size:13px;color:var(--muted);margin-top:12px}
-.prof-cadastro-link a{color:var(--accent);text-decoration:none;font-weight:700}
+.prof-cadastro-link a{color:var(--accent);text-decoration:none;font-weight:700;cursor:pointer}
 .prof-cadastro-link a:hover{text-decoration:underline}
 .prof-header{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
 .prof-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}

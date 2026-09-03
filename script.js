@@ -905,6 +905,6 @@ setInterval(function() {
 // ===== INIT =====
 window.addEventListener('load', function() {
   var h = location.hash.replace('#', '');
-  if (h === 'jogar' || h === 'professor' || h === 'login') router(h);
+  if (h === 'jogar' || h === 'professor' || h === 'prof-cadastro' || h === 'login') router(h);
   else router('home');
 });
