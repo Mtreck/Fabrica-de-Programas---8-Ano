@@ -268,30 +268,27 @@ async function renderSalaDetalhe() {
   var url = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(link);
   document.getElementById('salaQrImg').src = url;
 
-  // Mostrar aba Quiz apenas para salas de quiz
-  var tabs = document.querySelector('#view-sala .prof-tabs');
-  var existingQuizTab = tabs.querySelector('[onclick*="quiz"]');
-  if (s.jogo === 'quiz' && !existingQuizTab) {
-    var quizBtn = document.createElement('button');
-    quizBtn.className = 'prof-tab';
-    quizBtn.setAttribute('onclick', "salaTab('quiz')");
-    quizBtn.textContent = 'Quiz';
-    tabs.appendChild(quizBtn);
-  } else if (s.jogo !== 'quiz' && existingQuizTab) {
-    existingQuizTab.remove();
+  // Montar tabs conforme tipo da sala
+  var tabsHtml = '<button class="prof-tab active" onclick="salaTab(\'ranking\')">Ranking</button>';
+  tabsHtml += '<button class="prof-tab" onclick="salaTab(\'alunos\')">Alunos</button>';
+  if (s.jogo === 'quiz') {
+    tabsHtml += '<button class="prof-tab" onclick="salaTab(\'quiz\')">Quiz</button>';
+  } else {
+    tabsHtml += '<button class="prof-tab" onclick="salaTab(\'fases\')">Fases</button>';
   }
+  document.getElementById('salaTabs').innerHTML = tabsHtml;
 
   // Resetar pra tab ranking
-  document.querySelectorAll('#view-sala .prof-tab').forEach(function(t) { t.classList.remove('active'); });
-  document.querySelectorAll('#view-sala .prof-tab-content').forEach(function(c) { c.classList.remove('active'); });
-  tabs.querySelector('.prof-tab').classList.add('active');
+  document.querySelectorAll('#stab-ranking, #stab-alunos, #stab-fases, #stab-quiz').forEach(function(el) {
+    el.classList.remove('active');
+  });
   document.getElementById('stab-ranking').classList.add('active');
 
   renderAlunosSala();
   renderRankingSala();
   renderJogadores();
-  renderListaFasesCustom();
   if (s.jogo === 'quiz') renderListaQuizPerguntas();
+  else renderListaFasesCustom();
 }
 
 async function toggleSala() {
@@ -344,10 +341,11 @@ async function removerAlunoSala(id) {
 
 // ===== SALA TABS =====
 function salaTab(tab) {
-  document.querySelectorAll('#view-sala .prof-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('#salaTabs .prof-tab').forEach(function(t) { t.classList.remove('active'); });
   document.querySelectorAll('#view-sala .prof-tab-content').forEach(function(c) { c.classList.remove('active'); });
   event.target.classList.add('active');
-  document.getElementById('stab-' + tab).classList.add('active');
+  var content = document.getElementById('stab-' + tab);
+  if (content) content.classList.add('active');
   if (tab === 'ranking') renderRankingSala();
   if (tab === 'alunos') { renderAlunosSala(); renderJogadores(); }
   if (tab === 'fases') renderListaFasesCustom();

@@ -229,14 +229,10 @@
       </div>
     </div>
 
-    <!-- Tabs -->
-    <div class="prof-tabs">
-      <button class="prof-tab active" onclick="salaTab('ranking')">Ranking</button>
-      <button class="prof-tab" onclick="salaTab('alunos')">Alunos</button>
-      <button class="prof-tab" onclick="salaTab('fases')">Fases</button>
-    </div>
+    <!-- Tabs (dinamicas:Ranking + Alunos + Fases OU Quiz) -->
+    <div id="salaTabs" class="prof-tabs"></div>
 
-    <!-- Tab: Ranking -->
+    <!-- Tab: Ranking (sempre presente) -->
     <div id="stab-ranking" class="prof-tab-content active">
       <div class="sala-qr-row">
         <div class="sala-qr-box">
@@ -251,7 +247,7 @@
       </div>
     </div>
 
-    <!-- Tab: Alunos -->
+    <!-- Tab: Alunos (sempre presente) -->
     <div id="stab-alunos" class="prof-tab-content">
       <div class="prof-card">
         <h3>Alunos na sala</h3>
